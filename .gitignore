@@ -1,0 +1,6 @@
+.*
+!.mvn
+!.travis*
+
+*.iml
+target/
