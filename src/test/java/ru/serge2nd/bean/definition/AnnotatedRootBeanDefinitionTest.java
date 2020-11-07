@@ -18,7 +18,7 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.beans.factory.support.BeanDefinitionBuilder.rootBeanDefinition;
 import static ru.serge2nd.bean.definition.BeanDefinitionHelperTest.SFM;
-import static ru.serge2nd.test.matcher.AssertMatches.assertMatches;
+import static ru.serge2nd.test.matcher.AssertAllMatch.assertAllMatch;
 import static ru.serge2nd.test.matcher.AssertThat.assertThat;
 import static ru.serge2nd.test.matcher.CommonMatch.notNullValue;
 
@@ -32,7 +32,7 @@ class AnnotatedRootBeanDefinitionTest {
         arguments("factory"        , untyped(), SFM           , aa(abd -> assertThat(abd.getFactoryMethodMetadata(), notNullValue("method metadata")))),
         arguments("class"          , typed()  , null          , aa(abd -> assertThat(abd.getMetadata()             , notNullValue("metadata")))),
 
-        arguments("factory & class", typed()  , SFM           , aa(abd -> assertMatches(notNullValue("metadata"), abd.getFactoryMethodMetadata(), abd.getMetadata()))),
+        arguments("factory & class", typed()  , SFM           , aa(abd -> assertAllMatch(notNullValue("metadata"), abd.getFactoryMethodMetadata(), abd.getMetadata()))),
 
         arguments("abd"            , DUMMY_ABD, null          , aa(abd -> assertThat(abd.getBeanClass()            , sameInstance(DUMMY_ABD.getBeanClass()),
                                                                                      abd.getFactoryMethodMetadata(), nullValue(),

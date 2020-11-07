@@ -15,8 +15,8 @@ import static ru.serge2nd.bean.PropertyUtil.findPrefix;
 import static ru.serge2nd.bean.PropertyUtil.propertyOrigin;
 import static ru.serge2nd.bean.PropertyUtil.propertySuffixOrigin;
 import static ru.serge2nd.collection.HardProperties.properties;
+import static ru.serge2nd.test.matcher.AssertAllMatch.assertAllMatch;
 import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
-import static ru.serge2nd.test.matcher.AssertMatches.assertMatches;
 import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
 
 @TestInstance(Lifecycle.PER_CLASS)
@@ -67,7 +67,7 @@ class PropertyUtilTest implements NoInstanceTest<PropertyUtil> {
 
     @Test @SuppressWarnings("ConstantConditions")
     void testFindPrefixNullArgs() {
-        assertMatches(nullValue(), findPrefix(null, ""), findPrefix("", (String[])null));
+        assertAllMatch(nullValue(), findPrefix(null, ""), findPrefix("", (String[])null));
     }
 
     @Test @SuppressWarnings("ResultOfMethodCallIgnored")

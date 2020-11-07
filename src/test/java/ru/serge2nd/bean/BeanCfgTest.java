@@ -19,7 +19,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static ru.serge2nd.bean.BeanCfg.*;
 import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
 import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CallableMatch.producesSame;
+import static ru.serge2nd.test.matcher.SequentMatch.givesSame;
 import static ru.serge2nd.test.matcher.CommonMatch.equalTo;
 import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
 import static ru.serge2nd.test.matcher.CommonMatch.sameAs;
@@ -32,13 +32,13 @@ class BeanCfgTest {
         Supplier<Map<?, ?>> supplier      = ()->unmodifiableMap(emptyMap());
     return asList(
         //        Instance builder                      Expected name  Expected class  Expected supplier
-        arguments(s(()->of(m))                        , nameFromClass, instanceClass , producesSame(m)),
-        arguments(s(()->of(m, customName))            , customName   , null          , producesSame(m)),
-        arguments(s(()->from(m, customName))          , customName   , instanceClass , producesSame(m)),
-        arguments(s(()->of(instanceClass, supplier))  , nameFromClass, instanceClass , sameAs(supplier)),
-        arguments(s(()->of(instanceClass, customName)), customName   , instanceClass , nullValue()),
-        arguments(s(()->of(supplier, customName))     , customName   , null          , sameAs(supplier)),
-        arguments(s(()->of(instanceClass))            , nameFromClass, instanceClass , nullValue()));
+        arguments(s(()->of(m))                        , nameFromClass, instanceClass, givesSame(m)),
+        arguments(s(()->of(m, customName))            , customName   , null         , givesSame(m)),
+        arguments(s(()->from(m, customName))          , customName   , instanceClass, givesSame(m)),
+        arguments(s(()->of(instanceClass, supplier))  , nameFromClass, instanceClass, sameAs(supplier)),
+        arguments(s(()->of(instanceClass, customName)), customName   , instanceClass, nullValue()),
+        arguments(s(()->of(supplier, customName))     , customName   , null         , sameAs(supplier)),
+        arguments(s(()->of(instanceClass))            , nameFromClass, instanceClass, nullValue()));
     }
     @ParameterizedTest @MethodSource("argsProvider")
     void testOf(Supplier<BeanCfg> supplier, String expectedName, Class<?> expectedClass, Matcher<Supplier<?>> supplierMatcher) {

@@ -34,11 +34,11 @@ import static ru.serge2nd.stream.util.CharacteristicSet.maskOf;
 import static ru.serge2nd.test.Asserting.assertEach;
 import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
 import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CallableMatch.emits;
+import static ru.serge2nd.test.matcher.SequentMatch.emits;
 import static ru.serge2nd.test.matcher.CommonMatch.equalTo;
-import static ru.serge2nd.test.matcher.CommonMatch.hasNext;
+import static ru.serge2nd.test.matcher.SequentMatch.hasNext;
 import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
-import static ru.serge2nd.test.matcher.CommonMatch.noNext;
+import static ru.serge2nd.test.matcher.SequentMatch.noNext;
 import static ru.serge2nd.test.matcher.CommonMatch.noSuchElement;
 import static ru.serge2nd.test.matcher.CommonMatch.sameAs;
 import static ru.serge2nd.test.matcher.CommonMatch.sameClass;
@@ -242,7 +242,7 @@ class CharacteristicSetTest {
         assertForMany(illegalArgument(),
         () -> maskOf((Characteristics[])null),
         () -> new CharacteristicSet().containsAll(null),
-        () -> new CharacteristicSet().toArray((Object[])null),
+        () -> new CharacteristicSet().toArray(null),
         () -> new CharacteristicSet().forEach(null),
         () -> sp(0).tryAdvance(null),
         () -> sp(0).forEachRemaining(null));

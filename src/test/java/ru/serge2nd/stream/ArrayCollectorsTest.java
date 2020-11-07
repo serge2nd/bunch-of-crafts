@@ -12,7 +12,7 @@ import static ru.serge2nd.stream.ArrayCollectors.NO_INTS;
 import static ru.serge2nd.stream.MapCollectorsTest.NOW;
 import static ru.serge2nd.stream.util.Collecting.collect;
 import static ru.serge2nd.test.matcher.ArrayMatch.isArray;
-import static ru.serge2nd.test.matcher.ArrayMatch.isInts;
+import static ru.serge2nd.test.matcher.ArrayMatch.ints;
 import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
 import static ru.serge2nd.test.matcher.AssertThat.assertThat;
 import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
@@ -24,10 +24,10 @@ class ArrayCollectorsTest implements NoInstanceTest<ArrayCollectors> {
         assertSame(NO_INTS, collect(ArrayCollectors.mapToInts(LocalDate::getYear, 0)));
     }
     @Test void testMapToInts() {
-        assertThat(collect(ArrayCollectors.mapToInts(LocalDate::getYear, 2), NOW.withYear(5), NOW.withYear(7)), isInts(5, 7));
+        assertThat(collect(ArrayCollectors.mapToInts(LocalDate::getYear, 2), NOW.withYear(5), NOW.withYear(7)), ints(5, 7));
     }
     @Test void testMapToTruncInts() {
-        assertThat(collect(ArrayCollectors.mapToInts(LocalDate::getYear, 2), NOW.withYear(5), NOW.withYear(7), NOW.withYear(9)), isInts(5, 7));
+        assertThat(collect(ArrayCollectors.mapToInts(LocalDate::getYear, 2), NOW.withYear(5), NOW.withYear(7), NOW.withYear(9)), ints(5, 7));
     }
 
     @Test void testMapToArray() {
