@@ -242,7 +242,7 @@ class CharacteristicSetTest {
         assertForMany(illegalArgument(),
         () -> maskOf((Characteristics[])null),
         () -> new CharacteristicSet().containsAll(null),
-        () -> new CharacteristicSet().toArray(null),
+        () -> new CharacteristicSet().toArray((Object[])null),
         () -> new CharacteristicSet().forEach(null),
         () -> sp(0).tryAdvance(null),
         () -> sp(0).forEachRemaining(null));

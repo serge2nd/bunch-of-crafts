@@ -1,5 +1,8 @@
 package ru.serge2nd;
 
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
+
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.function.Function;
@@ -14,17 +17,20 @@ import static org.springframework.util.ObjectUtils.isArray;
 public class ObjectAssist {
     private ObjectAssist() { throw errNotInstantiable(lookup().lookupClass()); }
 
-    public static <V> V nullSafe(V v, String msg) {
+    @NonNull
+    public static <V> V nullSafe(@Nullable V v, String msg) {
         if (v == null) throw new IllegalArgumentException(msg);
         return v;
     }
 
-    public static <V, T extends Throwable> V nullSafe(V v, String msg, Function<String, T> err) {
+    @NonNull
+    public static <V, T extends Throwable> V nullSafe(@Nullable V v, String msg, Function<String, T> err) {
         if (v == null) throwSneaky(err.apply(msg));
         return v;
     }
 
-    public static <V, T extends Throwable> V nullSafe(V v, Supplier<T> err) {
+    @NonNull
+    public static <V, T extends Throwable> V nullSafe(@Nullable V v, Supplier<T> err) {
         if (v == null) throwSneaky(err.get());
         return v;
     }
