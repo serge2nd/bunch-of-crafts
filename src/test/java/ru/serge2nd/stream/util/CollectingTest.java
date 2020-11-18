@@ -15,10 +15,7 @@ import java.util.stream.Collector;
 import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 import static org.hamcrest.Matchers.hasSize;
-import static ru.serge2nd.stream.util.Collecting.accumulate;
-import static ru.serge2nd.stream.util.Collecting.collect;
-import static ru.serge2nd.stream.util.Collecting.noCombiner;
-import static ru.serge2nd.stream.util.Collecting.toLargerCombiner;
+import static ru.serge2nd.stream.util.Collecting.*;
 import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
 import static ru.serge2nd.test.matcher.AssertThat.assertThat;
 import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
@@ -68,6 +65,13 @@ class CollectingTest implements NoInstanceTest<Collecting> {
         () -> collect(emptyList(), nullAccumulator()),
         () -> collect(emptyList(), nullFinisher()),
         () -> collect(emptyList(), nullCharacteristics()),
+        () -> gather(null, testCollector()),
+        () -> gather(emptySet(), null),
+        () -> gather(emptySet(), nullSupplier()),
+        () -> gather(emptySet(), nullSupplierGet()),
+        () -> gather(emptySet(), nullAccumulator()),
+        () -> gather(emptySet(), nullFinisher()),
+        () -> gather(emptySet(), nullCharacteristics()),
         () -> collect((Object[])null, testCollector()),
         () -> collect(NO_TYPES, null),
         () -> collect(NO_TYPES, nullSupplier()),
@@ -75,15 +79,18 @@ class CollectingTest implements NoInstanceTest<Collecting> {
         () -> collect(NO_TYPES, nullAccumulator()),
         () -> collect(NO_TYPES, nullFinisher()),
         () -> collect(NO_TYPES, nullCharacteristics()),
-        () -> accumulate((Object[])null, "", (a, e) -> {}),
-        () -> accumulate(NO_TYPES, null, (a, e) -> {}),
-        () -> accumulate(NO_TYPES, "", null),
-        () -> accumulate((List<?>)null, "", (a, e) -> {}),
-        () -> accumulate(emptyList(), null, (a, e) -> {}),
-        () -> accumulate(emptyList(), "", null),
-        () -> accumulate((Iterable<?>)null, "", (a, e) -> {}),
-        () -> accumulate(emptySet(), null, (a, e) -> {}),
-        () -> accumulate(emptySet(), "", null));
+        () -> collect((Object[])null, "", (a, e) -> {}),
+        () -> collect(NO_TYPES, null, (a, e) -> {}),
+        () -> collect(NO_TYPES, "", null),
+        () -> collect((List<?>)null, "", (a, e) -> {}),
+        () -> collect(emptyList(), null, (a, e) -> {}),
+        () -> collect(emptyList(), "", null),
+        () -> collect((Iterable<?>)null, "", (a, e) -> {}),
+        () -> collect(emptySet(), null, (a, e) -> {}),
+        () -> collect(emptySet(), "", null),
+        () -> gather(null, "", (a, e) -> {}),
+        () -> gather(emptySet(), null, (a, e) -> {}),
+        () -> gather(emptySet(), "", null));
     }
 
     static <E> TestCollector<E> nullSupplier() {

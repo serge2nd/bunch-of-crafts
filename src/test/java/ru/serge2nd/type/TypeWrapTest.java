@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.junit.platform.commons.util.ReflectionUtils.getDeclaredConstructor;
 import static org.springframework.util.ClassUtils.resolveClassName;
-import static ru.serge2nd.stream.util.Collecting.accumulate;
+import static ru.serge2nd.stream.util.Collecting.collect;
 import static ru.serge2nd.type.Types.NO_TYPES;
 
 @TestInstance(Lifecycle.PER_CLASS)
@@ -79,7 +79,7 @@ class TypeWrapTest {
     }
     static <T> TypeWrap<T> wrap(Class<?> raw, int dims, Type... types) {
         if (types.length < 2) {
-            return wrap(resolveClassName(accumulate(nCopies(dims, "[]"),
+            return wrap(resolveClassName(collect(nCopies(dims, "[]"),
                     new StringBuilder(raw.getName()), StringBuilder::append).toString(), null));
         }
         Type t = parameterizedTestType(raw, types);

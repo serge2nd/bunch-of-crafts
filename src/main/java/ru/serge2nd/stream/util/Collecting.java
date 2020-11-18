@@ -35,21 +35,31 @@ public class Collecting {
      * @param elements iterable elements to collect
      * @param collector collector to use
      * @return collected result
-     * @see #accumulate(Iterable, Object, BiConsumer)
+     * @see #collect(Iterable, Object, BiConsumer)
      */
     public static <E, A, R> R collect(Iterable<? extends E> elements, @NonNull Collector<E, A, R> collector) {
-        A a = accumulate(elements, a(collector), collector.accumulator());
-        return cs(collector).contains(IDENTITY_FINISH) ? (R)a : finisher(collector).apply(a);
+        A a = collect(elements, a(collector), collector.accumulator());
+        return cs(collector).contains(IDENTITY_FINISH) ? (R)a : f(collector).apply(a);
     }
 
     /**
      * Analogous to {@link #collect(Iterable, Collector)} with random-access optimization
      * if the specified list implements the {@link RandomAccess}.
-     * @see #accumulate(List, Object, BiConsumer)
+     * @see #collect(List, Object, BiConsumer)
      */
     public static <E, A, R> R collect(List<? extends E> list, @NonNull Collector<E, A, R> collector) {
-        A a = accumulate(list, a(collector), collector.accumulator());
-        return cs(collector).contains(IDENTITY_FINISH) ? (R)a : finisher(collector).apply(a);
+        A a = collect(list, a(collector), collector.accumulator());
+        return cs(collector).contains(IDENTITY_FINISH) ? (R)a : f(collector).apply(a);
+    }
+
+    /**
+     * Same as {@link #collect(Iterable, Collector)} but iterates on the result of {@link Collection#toArray()}.
+     * That may give a tiny boost on small array-based collections where {@link Collection#toArray() toArray()} returns copy of the underlying array.
+     * @see #gather(Collection, Object, BiConsumer)
+     */
+    public static <E, A, R> R gather(Collection<? extends E> collection, @NonNull Collector<E, A, R> collector) {
+        A a = gather(collection, a(collector), collector.accumulator());
+        return cs(collector).contains(IDENTITY_FINISH) ? (R)a : f(collector).apply(a);
     }
 
     /**
@@ -57,11 +67,11 @@ public class Collecting {
      * @param elements array of elements to collect
      * @param collector collector to use
      * @return collected result
-     * @see #accumulate(Object[], Object, BiConsumer)
+     * @see #collect(Object[], Object, BiConsumer)
      */
     public static <E, A, R> R collect(E[] elements, @NonNull Collector<E, A, R> collector) {
-        A a = accumulate(elements, a(collector), collector.accumulator());
-        return cs(collector).contains(IDENTITY_FINISH) ? (R)a : finisher(collector).apply(a);
+        A a = collect(elements, a(collector), collector.accumulator());
+        return cs(collector).contains(IDENTITY_FINISH) ? (R)a : f(collector).apply(a);
     }
 
     /**
@@ -79,7 +89,7 @@ public class Collecting {
      * @param accumulator accumulating function
      * @return {@code a} (the second argument) after accumulating
      */
-    public static <E, A> A accumulate(@NonNull E[] elements, @NonNull A a, @NonNull BiConsumer<A, E> accumulator) {
+    public static <E, A> A collect(@NonNull E[] elements, @NonNull A a, @NonNull BiConsumer<A, E> accumulator) {
         for (E e : elements) accumulator.accept(a, e); return a;
     }
 
@@ -90,27 +100,36 @@ public class Collecting {
      * @param accumulator accumulating function
      * @return {@code a} (the second argument) after accumulating
      */
-    public static <E, A> A accumulate(@NonNull Iterable<? extends E> elements, @NonNull A a, @NonNull BiConsumer<A, E> accumulator) {
+    public static <E, A> A collect(@NonNull Iterable<? extends E> elements, @NonNull A a, @NonNull BiConsumer<A, E> accumulator) {
         for (E e : elements) accumulator.accept(a, e); return a;
     }
 
     /**
-     * Analogous to {@link #collect(Iterable, Collector)} with random-access optimization
+     * Analogous to {@link #collect(Iterable, Object, BiConsumer)} with random-access optimization
      * if the specified list implements the {@link RandomAccess}.
      */
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    public static <E, A> A accumulate(@NonNull List<? extends E> l, @NonNull A a, @NonNull BiConsumer<A, E> accumulator) {
-        if (l instanceof RandomAccess) {
-            for (int i = 0, n = l.size(); i < n; i++) accumulator.accept(a, l.get(i));
+    public static <E, A> A collect(@NonNull List<? extends E> list, @NonNull A a, @NonNull BiConsumer<A, E> accumulator) {
+        if (list instanceof RandomAccess) {
+            for (int i = 0, n = list.size(); i < n; i++) accumulator.accept(a, list.get(i));
         } else {
-            for (E e : l) accumulator.accept(a, e);
+            for (E e : list) accumulator.accept(a, e);
         }
         return a;
     }
 
-    private static <A> A                 a(Collector<?, A, ?> collector)        { return nullSafe(collector.supplier(), "no supplier").get(); }
-    private static <A, R> Function<A, R> finisher(Collector<?, A, R> collector) { return nullSafe(collector.finisher(), "no finisher"); }
-    private static Set<Characteristics>  cs(Collector<?, ?, ?> collector)       { return nullSafe(collector.characteristics(), "no characteristics"); }
+    /**
+     * Same as {@link #collect(Iterable, Object, BiConsumer)} but iterates on the result of {@link Collection#toArray()}.
+     * That may give a little boost on small array-based collections where {@link Collection#toArray() toArray()} returns copy of the underlying array.
+     */
+    public static <E, A> A gather(@NonNull Collection<? extends E> collection, @NonNull A a, @NonNull BiConsumer<A, E> accumulator) {
+        E[] elements = (E[])collection.toArray();
+        for (E e : elements) accumulator.accept(a, e); return a;
+    }
+
+    private static <A> A                 a(Collector<?, A, ?> collector)  { return nullSafe(collector.supplier(), "no supplier").get(); }
+    private static <A, R> Function<A, R> f(Collector<?, A, R> collector)  { return nullSafe(collector.finisher(), "no finisher"); }
+    private static Set<Characteristics>  cs(Collector<?, ?, ?> collector) { return nullSafe(collector.characteristics(), "no characteristics"); }
     //endregion
 
     //region Characteristics mixins

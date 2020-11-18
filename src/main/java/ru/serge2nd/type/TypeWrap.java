@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
 import static lombok.AccessLevel.PRIVATE;
 import static ru.serge2nd.ObjectAssist.nullSafe;
 import static ru.serge2nd.stream.ArrayCollectors.mappingAccumulator;
-import static ru.serge2nd.stream.util.Collecting.accumulate;
+import static ru.serge2nd.stream.util.Collecting.collect;
 import static ru.serge2nd.type.Types.NO_TYPES;
 import static ru.serge2nd.type.Classes.arrayClass;
 import static ru.serge2nd.type.Types.makeGenericArrayType;
@@ -93,7 +93,7 @@ public final class TypeWrap<T> implements ParameterizedType, GenericArrayType {
     public static Type   unwrap(Type t)       { return t instanceof TypeWrap ? ((TypeWrap<?>)t).getType() : t; }
     public static Type[] unwrap(Type[] types) {
         if (types.length == 0) return types;
-        return accumulate(types, new Type[types.length], mappingAccumulator(t -> unwrap(nullSafe(t, "null type"))));
+        return collect(types, new Type[types.length], mappingAccumulator(t -> unwrap(nullSafe(t, "null type"))));
     }
     //endregion
 

@@ -14,7 +14,7 @@ import static java.lang.Integer.bitCount;
 import static java.lang.Integer.numberOfLeadingZeros;
 import static java.lang.Integer.numberOfTrailingZeros;
 import static java.lang.reflect.Array.newInstance;
-import static ru.serge2nd.stream.util.Collecting.accumulate;
+import static ru.serge2nd.stream.util.Collecting.collect;
 
 /**
  * An immutable set that effectively (by integer mask) stores
@@ -93,8 +93,7 @@ public final class CharacteristicSet extends Unmodifiable<Characteristics> imple
     public int hashCode() { return mask; }
     @Override
     public String toString() {
-        return isEmpty() ? "[]" : accumulate(this,
-                new StringJoiner(", ", "[", "]"),
+        return isEmpty() ? "[]" : collect(this, new StringJoiner(", ", "[", "]"),
                 (sj, c) -> sj.add(String.valueOf(c)))
                 .toString();
     }

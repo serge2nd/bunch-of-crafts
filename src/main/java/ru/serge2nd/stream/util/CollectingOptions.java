@@ -27,13 +27,13 @@ public interface CollectingOptions {
             .toArray(); }
 
     /** Indicates the result must be unmodifiable. */
-    int UNMODIFIABLE = 1;
+    int UNMODIFIABLE = 1 << 4;
 
     /** Enables dropping out {@code null} elements. */
-    int NON_NULL     = 1 << 1;
+    int NON_NULL     = 1 << 7;
 
     /** Enables dropping out {@code null} values in the {@link java.util.Map}. */
-    int NON_NULL_VAL = 1 << 2;
+    int NON_NULL_VAL = 1 << 10;
 
     static int[] collectingOptions() { return Arrays.copyOf(ALL, ALL.length); }
 

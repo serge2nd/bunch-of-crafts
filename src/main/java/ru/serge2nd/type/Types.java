@@ -14,7 +14,7 @@ import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.Collections.nCopies;
 import static org.springframework.util.StringUtils.delete;
 import static ru.serge2nd.type.Classes.arrayClass;
-import static ru.serge2nd.stream.util.Collecting.accumulate;
+import static ru.serge2nd.stream.util.Collecting.collect;
 import static ru.serge2nd.ObjectAssist.errNotInstantiable;
 
 /**
@@ -119,7 +119,7 @@ public class Types {
                     dims++;
                 }
                 String typeName = t.getTypeName();
-                return accumulate(nCopies(dims, "[]"),
+                return collect(nCopies(dims, "[]"),
                         new StringBuilder(typeName.length() + 2*dims).append(typeName),
                         StringBuilder::append).toString();
             }
