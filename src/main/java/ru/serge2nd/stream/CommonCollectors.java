@@ -32,7 +32,7 @@ import static ru.serge2nd.ObjectAssist.errNotInstantiable;
  */
 @SuppressWarnings("unchecked")
 public class CommonCollectors {
-    private CommonCollectors() { throw errNotInstantiable(lookup().lookupClass()); }
+    private CommonCollectors() { throw errNotInstantiable(lookup()); }
 
     //region Factory methods
 

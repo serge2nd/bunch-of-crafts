@@ -25,7 +25,7 @@ import static ru.serge2nd.ObjectAssist.errNotInstantiable;
  * @see CollectingOptions
  */
 public class MappingCollectors {
-    private MappingCollectors() { throw errNotInstantiable(lookup().lookupClass()); }
+    private MappingCollectors() { throw errNotInstantiable(lookup()); }
 
     //region Factory methods
 

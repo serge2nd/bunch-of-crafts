@@ -19,7 +19,7 @@ import static ru.serge2nd.ObjectAssist.errNotInstantiable;
  * @see Collector#accumulator()
  */
 public class MapAccumulators {
-    private MapAccumulators() { throw errNotInstantiable(lookup().lookupClass()); }
+    private MapAccumulators() { throw errNotInstantiable(lookup()); }
 
     public static <E, K, M extends Map<K, E>> BiConsumer<M, E> keyAccumulator(@NonNull Function<E, K> mapping, int opts) {
         return has(NON_NULL, opts)

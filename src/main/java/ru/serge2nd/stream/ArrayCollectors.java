@@ -20,7 +20,7 @@ import static ru.serge2nd.ObjectAssist.errNotInstantiable;
  * @see ru.serge2nd.stream
  */
 public class ArrayCollectors {
-    private ArrayCollectors() { throw errNotInstantiable(lookup().lookupClass()); }
+    private ArrayCollectors() { throw errNotInstantiable(lookup()); }
 
     public static final int[] NO_INTS = new int[0];
 

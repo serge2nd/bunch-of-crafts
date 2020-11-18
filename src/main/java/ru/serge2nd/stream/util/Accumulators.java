@@ -21,7 +21,7 @@ import static ru.serge2nd.ObjectAssist.errNotInstantiable;
  * @see Collector#accumulator()
  */
 public class Accumulators {
-    private Accumulators() { throw errNotInstantiable(lookup().lookupClass()); }
+    private Accumulators() { throw errNotInstantiable(lookup()); }
 
     @SuppressWarnings("unchecked,rawtypes")
     public static <E, C extends Collection> BiConsumer<C, E> collectionAdd() { return Collection::add; }

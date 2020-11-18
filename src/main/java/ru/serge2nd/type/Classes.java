@@ -12,7 +12,7 @@ import static org.springframework.util.ReflectionUtils.getUniqueDeclaredMethods;
 import static ru.serge2nd.ObjectAssist.errNotInstantiable;
 
 public class Classes {
-    private Classes() { throw errNotInstantiable(lookup().lookupClass()); }
+    private Classes() { throw errNotInstantiable(lookup()); }
 
     public static Class<?> arrayClass(Class<?> component, int dims) {
         return arrayClass(component, dims, null);

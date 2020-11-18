@@ -3,6 +3,7 @@ package ru.serge2nd;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import java.lang.invoke.MethodHandles.Lookup;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.function.Function;
@@ -15,7 +16,7 @@ import static java.lang.reflect.Array.newInstance;
 import static org.springframework.util.ObjectUtils.isArray;
 
 public class ObjectAssist {
-    private ObjectAssist() { throw errNotInstantiable(lookup().lookupClass()); }
+    private ObjectAssist() { throw errNotInstantiable(lookup()); }
 
     @NonNull
     public static <V> V nullSafe(@Nullable V v, String msg) {
@@ -153,6 +154,9 @@ public class ObjectAssist {
         return elems;
     }
 
+    public static UnsupportedOperationException errNotInstantiable(Lookup z) {
+        return errNotInstantiable(z.lookupClass());
+    }
     public static UnsupportedOperationException errNotInstantiable(Class<?> cls) {
         return new UnsupportedOperationException("non-instantiable: " + cls);
     }

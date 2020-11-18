@@ -22,7 +22,7 @@ import static ru.serge2nd.ObjectAssist.errNotInstantiable;
  * Helpers for creating and transforming bean definitions.
  */
 public class BeanDefinitionHelper {
-    private BeanDefinitionHelper() { throw errNotInstantiable(lookup().lookupClass()); }
+    private BeanDefinitionHelper() { throw errNotInstantiable(lookup()); }
 
     /**
      * Given a bean definition by-name getter, bean class by-name getter and bean names,

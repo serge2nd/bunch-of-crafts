@@ -23,7 +23,7 @@ import static ru.serge2nd.ObjectAssist.errNotInstantiable;
  * @see CollectingOptions
  */
 public class FilteringCollectors {
-    private FilteringCollectors() { throw errNotInstantiable(lookup().lookupClass()); }
+    private FilteringCollectors() { throw errNotInstantiable(lookup()); }
 
     //region Factory methods
 

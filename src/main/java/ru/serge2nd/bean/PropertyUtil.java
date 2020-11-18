@@ -17,7 +17,7 @@ import static ru.serge2nd.ObjectAssist.errNotInstantiable;
  * Utility methods working with properties, especially collecting them from some sources.
  */
 public class PropertyUtil {
-    private PropertyUtil() { throw errNotInstantiable(lookup().lookupClass()); }
+    private PropertyUtil() { throw errNotInstantiable(lookup()); }
 
     public static <V> PropertyOrigin<V> propertyOrigin(Function<String, V> propertyGetter, String... prefixes) {
         return propertyOrigin(propertyGetter, NAME, prefixes);

@@ -26,7 +26,7 @@ import static ru.serge2nd.ObjectAssist.errNotInstantiable;
  */
 @SuppressWarnings("unchecked")
 public class Collecting {
-    private Collecting() { throw errNotInstantiable(lookup().lookupClass()); }
+    private Collecting() { throw errNotInstantiable(lookup()); }
 
     //region Do collecting
 

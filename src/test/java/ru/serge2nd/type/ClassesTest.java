@@ -9,6 +9,7 @@ import ru.serge2nd.ObjectAssist;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static java.lang.invoke.MethodHandles.lookup;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -62,11 +63,10 @@ class ClassesTest implements NoInstanceTest<Classes> {
     @Test void testNotUniqueMethod()      { assertNull(Classes.findUniqueMethod(Object.class, m -> m.getName().contains("notify"))); }
     @Test void testUniqueMethodNotFound() { assertNull(Classes.findUniqueMethod(Object.class, $ -> false)); }
 
-    @Test void testNotInstantiable() { try {
-        throw ObjectAssist.errNotInstantiable(ClassesTest.class);
-    } catch (UnsupportedOperationException e) {
+    @Test void testNotInstantiable() {
+        UnsupportedOperationException e = ObjectAssist.errNotInstantiable(lookup());
         assertEquals("non-instantiable: " + ClassesTest.class, e.getMessage());
-    }}
+    }
 
     static class A {}
     static class Fake$$Proxy extends A {}

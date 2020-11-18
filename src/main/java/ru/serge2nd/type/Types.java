@@ -21,7 +21,7 @@ import static ru.serge2nd.ObjectAssist.errNotInstantiable;
  * Discovering {@link Type} and extensions.
  */
 public class Types {
-    private Types() { throw errNotInstantiable(lookup().lookupClass()); }
+    private Types() { throw errNotInstantiable(lookup()); }
 
     public static final Type[] NO_TYPES        = new Type[0];
     public static final char   ARRAY_MARKER    = '[';
