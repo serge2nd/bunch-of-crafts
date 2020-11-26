@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import static java.lang.String.format;
 import static org.junit.platform.commons.util.ReflectionUtils.newInstance;
 import static ru.serge2nd.test.matcher.AssertThat.assertThat;
 import static ru.serge2nd.test.matcher.CommonMatch.unsupported;
@@ -24,7 +23,7 @@ public interface NoInstanceTest<T> {
                 assertThat(()->newInstance(clazz), unsupported()); return;
             }
         }
-        throw new IllegalStateException(format("implement %s with concrete type arg", NoInstanceTest.class.getSimpleName()));
+        throw new IllegalStateException("implement " + NoInstanceTest.class.getSimpleName() + " with concrete type arg");
     }
 
     static Class<?> extractClass(Type t) {

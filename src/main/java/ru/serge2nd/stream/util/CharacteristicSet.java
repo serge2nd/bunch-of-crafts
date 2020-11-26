@@ -13,6 +13,7 @@ import java.util.stream.StreamSupport;
 import static java.lang.Integer.bitCount;
 import static java.lang.Integer.numberOfLeadingZeros;
 import static java.lang.Integer.numberOfTrailingZeros;
+import static java.lang.Integer.toHexString;
 import static java.lang.reflect.Array.newInstance;
 import static ru.serge2nd.stream.util.Collecting.collect;
 
@@ -129,7 +130,7 @@ public final class CharacteristicSet extends Unmodifiable<Characteristics> imple
             mask = forEachCharacteristic(mask, action);
         }
         @Override /* For debug purposes */
-        public String toString() { return String.format("%s<%s>(%d)", Iterator.class.getSimpleName(), Characteristics.class.getSimpleName(), mask); }
+        public String toString() { return Iterator.class.getSimpleName() + "<" + Characteristics.class.getSimpleName() + ">(0x" + toHexString(mask) + ")"; }
     }; }
     // endregion
 
@@ -176,7 +177,7 @@ public final class CharacteristicSet extends Unmodifiable<Characteristics> imple
         public int characteristics()      { return SIZED | SUBSIZED | IMMUTABLE | DISTINCT | NONNULL; }
 
         @Override /* For debug purposes */
-        public String toString() { return String.format("%s(%d)", getClass().getSimpleName(), mask); }
+        public String toString() { return getClass().getSimpleName() + "(0x" + toHexString(mask) + ")"; }
     }
 
     private static int forEachCharacteristic(int mask, Consumer<? super Characteristics> action) {

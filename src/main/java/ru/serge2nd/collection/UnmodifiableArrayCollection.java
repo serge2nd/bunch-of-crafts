@@ -14,8 +14,6 @@ import java.util.function.IntFunction;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static java.lang.String.format;
-
 /**
  * An unmodifiable collection backed directly by an array.
  * Note that further changes to the underlying array reflect this one.<br>
@@ -66,7 +64,7 @@ public abstract class UnmodifiableArrayCollection<E> extends Unmodifiable<E> {
     public final Iterator<E>    iterator()                                   { return new Itr<>(array); }
 
     static NoSuchElementException errOutOfBounds(int i, int len) {
-        return new NoSuchElementException(format("index %d not in [0; %d)", i, len));
+        return new NoSuchElementException("index " + i + " not in [0; " + len + ")");
     }
     //endregion
 

@@ -13,7 +13,6 @@ import java.util.NoSuchElementException;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
-import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.copyOf;
 import static java.util.Arrays.copyOfRange;
@@ -38,7 +37,7 @@ class UnmodifiableArrayListTest {
         new String[0],
         new String[] {"abc"},
         new String[] {"abc", "xyz"})
-        .map(a -> arguments(format("size=%d", a.length), a, new TestArrayList(a)));
+        .map(a -> arguments("size=" + a.length, a, new TestArrayList(a)));
     }
 
     @ParameterizedTest(name = "{0}") @MethodSource("arraysProvider")

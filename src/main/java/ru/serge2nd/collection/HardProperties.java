@@ -11,7 +11,6 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static java.lang.String.format;
 import static java.util.Arrays.stream;
 import static java.util.Collections.*;
 import static java.util.stream.IntStream.range;
@@ -164,7 +163,7 @@ public final class HardProperties extends Properties implements Serializable {
     }
     private static String asString(String key, Object val) {
         if (!(val == null || val instanceof String))
-            throw new ClassCastException(format("%s: expected a string, got %s", key, val.getClass().getName()));
+            throw new ClassCastException(key + ": expected a string, got " + val.getClass().getName());
         return (String)val;
     }
 

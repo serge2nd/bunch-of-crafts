@@ -7,7 +7,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collector;
 
-import static java.lang.String.format;
+import static java.lang.String.valueOf;
 import static java.lang.invoke.MethodHandles.lookup;
 import static ru.serge2nd.stream.util.CollectingOptions.NON_NULL;
 import static ru.serge2nd.stream.util.CollectingOptions.NON_NULL_VAL;
@@ -53,11 +53,16 @@ public class MapAccumulators {
 
     public static <K, V> void putUnique(Map<K, V> m, K k, V v) {
         V old = m.putIfAbsent(k, v);
-        if (old != null) throw duplicateKeyException(k, old, v);
+        if (old != null) throw errDuplicateKey(k, old, v);
     }
 
-    public static IllegalStateException duplicateKeyException(Object k, Object old, Object v) {
-        return new IllegalStateException(format(
-                "duplicate key %s (attempted merging values %s and %s)", k, old, v));
+    @SuppressWarnings("StringBufferReplaceableByString")
+    public static IllegalStateException errDuplicateKey(Object k, Object old, Object v) {
+        String sk = valueOf(k), sold = valueOf(old), sv = valueOf(v);
+        return new IllegalStateException(new StringBuilder(sk.length() + sold.length() + sv.length() + 64)
+                .append("duplicate key ").append(sk)
+                .append(" (attempted merging values ")
+                .append(sold).append(" and ").append(sv)
+                .append(")").toString());
     }
 }
