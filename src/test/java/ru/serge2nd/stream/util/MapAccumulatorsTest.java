@@ -8,16 +8,17 @@ import ru.serge2nd.NoInstanceTest;
 import java.util.HashMap;
 
 import static java.util.Collections.singletonMap;
-import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalState;
+import static ru.serge2nd.stream.util.MapAccumulators.putUnique;
+import static ru.serge2nd.test.match.AssertForMany.assertForMany;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.CommonMatch.illegalState;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class MapAccumulatorsTest implements NoInstanceTest<MapAccumulators> {
 
     @Test void testPutUnique() {
-        assertThat(()->MapAccumulators.putUnique(new HashMap<>(singletonMap(5, "five")), 5, "six"), illegalState());
+        assertThat(()-> putUnique(new HashMap<>(singletonMap(5, "five")), 5, "six"), illegalState());
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

@@ -25,11 +25,13 @@ import static org.springframework.util.ReflectionUtils.getDeclaredMethods;
 import static ru.serge2nd.bean.BeanCfg.builder;
 import static ru.serge2nd.bean.BeanCfg.from;
 import static ru.serge2nd.bean.definition.BeanDefinitionHelper.annotatedBeanDefinitions;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.equalTo;
-import static ru.serge2nd.test.matcher.CommonMatch.sameClass;
+import static ru.serge2nd.collection.HardPropertiesTest.UNMOD_MAP;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.equalTo;
+import static ru.serge2nd.test.match.CommonMatch.sameClass;
 
 @TestInstance(Lifecycle.PER_CLASS)
+@SuppressWarnings("RedundantUnmodifiable")
 class WrapBeanPostProcessorTest {
     @Qualifier("immutableCollection")        @Autowired Collection<String> immutableCollection;
     @Qualifier("immutableList")              @Autowired List<String> immutableList;
@@ -83,7 +85,7 @@ class WrapBeanPostProcessorTest {
     }
 
     @Test void testImmutableMap() { assertThat(
-        immutableMap               , sameClass(unmodifiableMap(emptyMap())),
+        immutableMap               , sameClass(UNMOD_MAP),
         new HashMap<>(immutableMap), equalTo(EXPECTEDM));
     }
 

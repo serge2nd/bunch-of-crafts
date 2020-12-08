@@ -26,16 +26,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.data.util.ReflectionUtils.getMethod;
 import static ru.serge2nd.test.Asserting.assertEach;
-import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.AssertForMany.assertForMany;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
 import static ru.serge2nd.type.Types.NO_TYPES;
 import static ru.serge2nd.collection.HardProperties.properties;
 
 @SuppressWarnings("OptionalGetWithoutIsPresent")
 @TestInstance(Lifecycle.PER_CLASS)
 public class TypesTest implements NoInstanceTest<Types> {
-    public static final TestClassLoader TEST_CLS_LDR = new TestClassLoader();
+    public static final TestClassLoader CLS_LDR = new TestClassLoader();
     static final Map<String, Path> CLASS_PATHS = properties(
             E.class.getName(), Paths.get(toURI(E.class))
     ).toMap();
@@ -52,13 +52,13 @@ public class TypesTest implements NoInstanceTest<Types> {
     void testRawFromGeneric2D()    { assertSame(E[][].class, Types.rawClass(GENERIC_2D_ARRAY)); }
     @Test
     void testRawFromGenericArrayWithCustomClassLoader() {
-        Class<?> result = Types.rawClass(GENERIC_ARRAY, TEST_CLS_LDR);
+        Class<?> result = Types.rawClass(GENERIC_ARRAY, CLS_LDR);
         assertNotSame(E[].class, result);
         assertEquals(E.class.getName(), result.getComponentType().getName());
     }
     @Test
     void testRawFromGeneric2DWithCustomClassLoader() {
-        Class<?> result = Types.rawClass(GENERIC_2D_ARRAY, TEST_CLS_LDR);
+        Class<?> result = Types.rawClass(GENERIC_2D_ARRAY, CLS_LDR);
         assertNotSame(E[][].class, result);
         assertEquals(E.class.getName(), result.getComponentType().getComponentType().getName());
     }

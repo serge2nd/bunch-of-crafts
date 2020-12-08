@@ -154,8 +154,8 @@ public class ObjectAssist {
         return elems;
     }
 
-    public static UnsupportedOperationException errNotInstantiable(Lookup z) {
-        return errNotInstantiable(z.lookupClass());
+    public static UnsupportedOperationException errNotInstantiable(Lookup $) {
+        return errNotInstantiable($.lookupClass());
     }
     public static UnsupportedOperationException errNotInstantiable(Class<?> cls) {
         return new UnsupportedOperationException("non-instantiable: " + cls);

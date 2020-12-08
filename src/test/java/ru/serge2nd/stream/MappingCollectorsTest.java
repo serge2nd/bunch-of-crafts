@@ -27,8 +27,8 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static ru.serge2nd.stream.MapCollectorsTest.*;
 import static ru.serge2nd.stream.util.Collecting.collect;
 import static ru.serge2nd.stream.util.CollectingOptions.*;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.equalTo;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.equalTo;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class MappingCollectorsTest implements NoInstanceTest<MappingCollectors> {

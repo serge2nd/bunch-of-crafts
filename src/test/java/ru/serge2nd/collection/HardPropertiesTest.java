@@ -38,17 +38,19 @@ import static ru.serge2nd.stream.MapCollectors.toMap;
 import static ru.serge2nd.stream.MappingCollectors.mapToList;
 import static ru.serge2nd.stream.util.Collecting.collect;
 import static ru.serge2nd.ObjectAssist.flatArray;
-import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.equalTo;
-import static ru.serge2nd.test.matcher.CommonMatch.fails;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
-import static ru.serge2nd.test.matcher.CommonMatch.sameAs;
-import static ru.serge2nd.test.matcher.CommonMatch.sameClass;
-import static ru.serge2nd.test.matcher.CommonMatch.unsupported;
+import static ru.serge2nd.test.match.AssertForMany.assertForMany;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.equalTo;
+import static ru.serge2nd.test.match.CommonMatch.fails;
+import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.CommonMatch.sameAs;
+import static ru.serge2nd.test.match.CommonMatch.sameClass;
+import static ru.serge2nd.test.match.CommonMatch.unsupported;
 
 @TestInstance(Lifecycle.PER_CLASS)
-class HardPropertiesTest {
+@SuppressWarnings("RedundantUnmodifiable")
+public class HardPropertiesTest {
+    public static final Map<Object, Object> UNMOD_MAP = unmodifiableMap(emptyMap());
     static final LocalDateTime DT = LocalDateTime.now();
     static final BiConsumer<?, ?> ASSERT_SAME = Assertions::assertSame;
     static final BiConsumer<?, ?> ASSERT_EQUALS = Assertions::assertEquals;
@@ -110,12 +112,11 @@ class HardPropertiesTest {
 
     @Test @SuppressWarnings("unchecked,rawtypes")
     void testOf() {
-        Map<?, ?> unmodifiableMap = unmodifiableMap(emptyMap());
         Map<?, ?> map = new HashMap() {{ put(5, "five"); }};
 
         HardProperties result = HardProperties.of(map);
         assertThat(
-        result.toMap()               , sameClass(unmodifiableMap),
+        result.toMap()               , sameClass(UNMOD_MAP),
         getField(result.toMap(), "m"), sameAs(map));
     }
     @Test
@@ -247,7 +248,7 @@ class HardPropertiesTest {
     }
     //endregion
 
-    @Test @SuppressWarnings("ConstantConditions,ResultOfMethodCallIgnored")
+    @Test @SuppressWarnings("ConstantConditions")
     void testNullArgs() {
         assertForMany(illegalArgument(),
         () -> properties((Object[])null),

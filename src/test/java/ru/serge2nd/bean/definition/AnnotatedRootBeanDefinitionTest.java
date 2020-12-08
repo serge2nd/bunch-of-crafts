@@ -18,9 +18,9 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.beans.factory.support.BeanDefinitionBuilder.rootBeanDefinition;
 import static ru.serge2nd.bean.definition.BeanDefinitionHelperTest.SFM;
-import static ru.serge2nd.test.matcher.AssertAllMatch.assertAllMatch;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.notNullValue;
+import static ru.serge2nd.test.match.AssertAllMatch.assertAllMatch;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.notNullValue;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class AnnotatedRootBeanDefinitionTest {

@@ -14,8 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class ObjectAssistTest implements NoInstanceTest<ObjectAssist> {

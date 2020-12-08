@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.beans.factory.support.BeanDefinitionBuilder.rootBeanDefinition;
 import static org.springframework.data.util.ReflectionUtils.findRequiredMethod;
-import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.AssertForMany.assertForMany;
+import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class BeanDefinitionHelperTest implements NoInstanceTest<BeanDefinitionHelper> {

@@ -6,8 +6,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import static org.junit.platform.commons.util.ReflectionUtils.newInstance;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.unsupported;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.unsupported;
 
 @SuppressWarnings("unused")
 public interface NoInstanceTest<T> {

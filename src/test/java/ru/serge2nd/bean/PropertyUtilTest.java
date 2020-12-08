@@ -15,9 +15,9 @@ import static ru.serge2nd.bean.PropertyUtil.findPrefix;
 import static ru.serge2nd.bean.PropertyUtil.propertyOrigin;
 import static ru.serge2nd.bean.PropertyUtil.propertySuffixOrigin;
 import static ru.serge2nd.collection.HardProperties.properties;
-import static ru.serge2nd.test.matcher.AssertAllMatch.assertAllMatch;
-import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.AssertAllMatch.assertAllMatch;
+import static ru.serge2nd.test.match.AssertForMany.assertForMany;
+import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class PropertyUtilTest implements NoInstanceTest<PropertyUtil> {

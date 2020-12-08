@@ -16,10 +16,10 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 import static org.hamcrest.Matchers.hasSize;
 import static ru.serge2nd.stream.util.Collecting.*;
-import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
-import static ru.serge2nd.test.matcher.CommonMatch.unsupported;
+import static ru.serge2nd.test.match.AssertForMany.assertForMany;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.CommonMatch.unsupported;
 import static ru.serge2nd.type.Types.NO_TYPES;
 
 @TestInstance(Lifecycle.PER_CLASS)

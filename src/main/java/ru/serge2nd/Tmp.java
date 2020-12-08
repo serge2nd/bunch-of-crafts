@@ -44,19 +44,14 @@ public class Tmp {
         return sum;
     }
 
-    public static float[] neumaierSum(float[] sum, float x) {
-        return iterativeKBSum(sum, x, 1);
-    }
+    public static float[] neumaierSum(float[] sum, float x) { return iterativeKBSum(sum, x, 1); }
 
-    public static float[] kleinSum(float[] sum, float x) {
-        return iterativeKBSum(sum, x, 2);
-    }
+    public static float[] kleinSum(float[] sum, float x) { return iterativeKBSum(sum, x, 2); }
 
     public static float[] iterativeKBSum(float[] sum, float x, int order) {
         for (int i = 0; i < order; i++)
             x = compensation(sum, x, i);
-        sum[order] += x;
-        return sum;
+        sum[order] += x; return sum;
     }
 
     public static float compensation(float[] sum, float x, int i) {
@@ -64,7 +59,6 @@ public class Tmp {
         float c = abs(sum[i]) >= abs(x)
             ? (sum[i] - aSum) + x
             : (x - aSum) + sum[i];
-        sum[i] = aSum;
-        return c;
+        sum[i] = aSum; return c;
     }
 }

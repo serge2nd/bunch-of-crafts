@@ -17,19 +17,20 @@ import static java.util.Collections.*;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static ru.serge2nd.bean.BeanCfg.*;
-import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.SequentMatch.givesSame;
-import static ru.serge2nd.test.matcher.CommonMatch.equalTo;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
-import static ru.serge2nd.test.matcher.CommonMatch.sameAs;
+import static ru.serge2nd.collection.HardPropertiesTest.UNMOD_MAP;
+import static ru.serge2nd.test.match.AssertForMany.assertForMany;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.SequentMatch.givesSame;
+import static ru.serge2nd.test.match.CommonMatch.equalTo;
+import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.CommonMatch.sameAs;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class BeanCfgTest {
     static List<Arguments> argsProvider() {
         String              customName    = "xyz"; Map<?, ?> m = emptyMap(); Class<?> instanceClass = m.getClass();
         String              nameFromClass = instanceClass.getSimpleName().substring(0, 1).toLowerCase() + instanceClass.getSimpleName().substring(1);
-        Supplier<Map<?, ?>> supplier      = ()->unmodifiableMap(emptyMap());
+        Supplier<Map<?, ?>> supplier      = () -> UNMOD_MAP;
     return asList(
         //        Instance builder                      Expected name  Expected class  Expected supplier
         arguments(s(()->of(m))                        , nameFromClass, instanceClass, givesSame(m)),

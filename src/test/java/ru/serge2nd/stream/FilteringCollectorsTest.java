@@ -25,8 +25,8 @@ import static ru.serge2nd.stream.MapCollectorsTest.NOW;
 import static ru.serge2nd.stream.MappingCollectorsTest.s;
 import static ru.serge2nd.stream.util.Collecting.collect;
 import static ru.serge2nd.stream.util.CollectingOptions.*;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.equalTo;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.equalTo;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class FilteringCollectorsTest implements NoInstanceTest<FilteringCollectors> {

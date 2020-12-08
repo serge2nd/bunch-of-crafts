@@ -11,11 +11,11 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static ru.serge2nd.stream.ArrayCollectors.NO_INTS;
 import static ru.serge2nd.stream.MapCollectorsTest.NOW;
 import static ru.serge2nd.stream.util.Collecting.collect;
-import static ru.serge2nd.test.matcher.ArrayMatch.isArray;
-import static ru.serge2nd.test.matcher.ArrayMatch.ints;
-import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.ArrayMatch.isArray;
+import static ru.serge2nd.test.match.ArrayMatch.ints;
+import static ru.serge2nd.test.match.AssertForMany.assertForMany;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class ArrayCollectorsTest implements NoInstanceTest<ArrayCollectors> {

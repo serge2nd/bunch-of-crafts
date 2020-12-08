@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static ru.serge2nd.stream.util.CollectingOptions.collectingOptions;
 import static ru.serge2nd.test.Asserting.assertEach;
-import static ru.serge2nd.test.matcher.ArrayMatch.isArray;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.ArrayMatch.isArray;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class CollectingOptionsTest {

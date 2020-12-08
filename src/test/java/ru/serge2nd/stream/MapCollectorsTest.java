@@ -19,17 +19,18 @@ import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static ru.serge2nd.collection.HardProperties.properties;
+import static ru.serge2nd.collection.HardPropertiesTest.UNMOD_MAP;
 import static ru.serge2nd.stream.util.CollectingOptions.*;
 import static ru.serge2nd.stream.util.Collecting.collect;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.equalTo;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalState;
-import static ru.serge2nd.test.matcher.CommonMatch.sameClass;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.equalTo;
+import static ru.serge2nd.test.match.CommonMatch.illegalState;
+import static ru.serge2nd.test.match.CommonMatch.sameClass;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class MapCollectorsTest implements NoInstanceTest<MapCollectors> {
     static final LocalDate NOW = LocalDate.now();
-    static final Class<?> UNMOD_MAP_CLS = unmodifiableMap(emptyMap()).getClass();
+    static final Class<?> UNMOD_MAP_CLS = UNMOD_MAP.getClass();
 
     //region toMapKey(), toMap() tests
 

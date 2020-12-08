@@ -30,11 +30,11 @@ import static org.junit.platform.commons.support.ModifierSupport.isFinal;
 import static org.springframework.data.util.ReflectionUtils.findRequiredMethod;
 import static org.springframework.util.ReflectionUtils.findMethod;
 import static ru.serge2nd.test.Asserting.assertEach;
-import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.equalTo;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
-import static ru.serge2nd.test.matcher.CommonMatch.sameClass;
+import static ru.serge2nd.test.match.AssertForMany.assertForMany;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.equalTo;
+import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.CommonMatch.sameClass;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class UnmodifiableTest {

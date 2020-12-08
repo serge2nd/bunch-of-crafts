@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.springframework.data.util.ReflectionUtils.findRequiredMethod;
 import static ru.serge2nd.test.Asserting.assertEach;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
-import static ru.serge2nd.type.TypesTest.TEST_CLS_LDR;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
+import static ru.serge2nd.type.TypesTest.CLS_LDR;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class ClassesTest implements NoInstanceTest<Classes> {
@@ -29,7 +29,7 @@ class ClassesTest implements NoInstanceTest<Classes> {
     @Test void testArrayClass()          { assertSame(Map[][].class, Classes.arrayClass(Map.class, 2)); }
     @Test void testPrimitiveArrayClass() { assertSame(int[][].class, Classes.arrayClass(int[].class, 1)); }
     @Test void testArrayClassWithCustomClassLoader() {
-        Class<?> result = Classes.arrayClass(TypesTest.E.class, 3, TEST_CLS_LDR);
+        Class<?> result = Classes.arrayClass(TypesTest.E.class, 3, CLS_LDR);
         assertNotSame(TypesTest.E[][][].class, result);
         assertEquals(TypesTest.E.class.getName(), result.getComponentType().getComponentType().getComponentType().getName());
     }

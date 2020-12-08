@@ -10,9 +10,9 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
-import static ru.serge2nd.test.matcher.AssertForMany.assertForMany;
-import static ru.serge2nd.test.matcher.AssertThat.assertThat;
-import static ru.serge2nd.test.matcher.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.AssertForMany.assertForMany;
+import static ru.serge2nd.test.match.AssertThat.assertThat;
+import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class AccumulatorsTest implements NoInstanceTest<Accumulators> {
