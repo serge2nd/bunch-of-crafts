@@ -28,7 +28,7 @@ public final class HardProperties extends Properties implements Serializable {
 
     /**
      * Creates unmodifiable properties from the given key-val pair sequence.
-     * @param keyValSeq {key1, val1, key2, val2, ...}
+     * @param keyValSeq <code>{key1, val1, key2, val2, ...}</code>
      * @return a {@link HardProperties} created from the given key-val pair sequence
      */
     public static HardProperties properties(@NonNull Object... keyValSeq) {
@@ -86,6 +86,7 @@ public final class HardProperties extends Properties implements Serializable {
     private HardProperties(Map<String, Object> map)               { this.map = map; }
     private HardProperties(String key, Object val)                { this.map = singletonMap(key, val); }
     private HardProperties(Map<String, Object> src, boolean copy) { this.map = unmodifiableMap(copy ? new HashMap<>(src) : src); }
+
     private static Map<String, Object> toSingletonMap(Map<String, Object> src) {
         String key = src.keySet().iterator().next();
         return singletonMap(key, src.get(key));

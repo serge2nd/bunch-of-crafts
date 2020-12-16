@@ -8,7 +8,7 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import ru.serge2nd.bean.BeanCfg;
 
 /** {@inheritDoc} */
-public enum BeanDefinitionFactoryImpl implements BeanDefinitionFactory {
+public enum DefaultBeanDefinitionFactory implements BeanDefinitionFactory {
     INSTANCE;
 
     /** {@inheritDoc} */

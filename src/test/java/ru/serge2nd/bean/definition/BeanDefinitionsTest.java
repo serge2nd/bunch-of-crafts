@@ -25,14 +25,14 @@ import static ru.serge2nd.test.match.AssertForMany.assertForMany;
 import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
 
 @TestInstance(Lifecycle.PER_CLASS)
-class BeanDefinitionHelperTest implements NoInstanceTest<BeanDefinitionHelper> {
+class BeanDefinitionsTest implements NoInstanceTest<BeanDefinitions> {
 
     @Test void testAnnotatedBeanDefinitionOfAnnotated() {
         AnnotatedBeanDefinition abd = AnnotatedRootBeanDefinition.from(typed(null, null));
-        assertSame(abd, BeanDefinitionHelper.annotatedBeanDefinition(abd, null));
+        assertSame(abd, BeanDefinitions.annotatedBeanDefinition(abd, null));
     }
-    @Test void testAnnotatedBeanDefinitionOfNull()    { assertNull(BeanDefinitionHelper.annotatedBeanDefinition(null, null)); }
-    @Test void testAnnotatedBeanDefinitionOfNonRoot() { assertNull(BeanDefinitionHelper.annotatedBeanDefinition(new GenericBeanDefinition(), null)); }
+    @Test void testAnnotatedBeanDefinitionOfNull()    { assertNull(BeanDefinitions.annotatedBeanDefinition(null, null)); }
+    @Test void testAnnotatedBeanDefinitionOfNonRoot() { assertNull(BeanDefinitions.annotatedBeanDefinition(new GenericBeanDefinition(), null)); }
 
     static List<Arguments> rootBeanDefinitionsProvider() { return asList(
         //        Title                          Bean definition                     Bean type getter  Expected resolved method
@@ -49,24 +49,24 @@ class BeanDefinitionHelperTest implements NoInstanceTest<BeanDefinitionHelper> {
         arguments("factory, no type getter"    , typed(FM.getName(), "")           , null            , null)); }
     @ParameterizedTest(name = "{0}") @MethodSource("rootBeanDefinitionsProvider")
     void testTryResolveFactoryMethod(String title, RootBeanDefinition rbd, Function<String, Class<?>> typeGetter, Method expectedFactoryMethod) {
-        assertSame(expectedFactoryMethod, BeanDefinitionHelper.tryResolveFactoryMethod(rbd, typeGetter).getResolvedFactoryMethod());
+        assertSame(expectedFactoryMethod, BeanDefinitions.tryResolveFactoryMethod(rbd, typeGetter).getResolvedFactoryMethod());
     }
     @Test
     void testAlreadyResolvedFactoryMethod() {
         RootBeanDefinition rbd = untyped(FM.getName());
         rbd.setResolvedFactoryMethod(SFM);
-        assertSame(SFM, BeanDefinitionHelper.tryResolveFactoryMethod(rbd, factoryClass()).getResolvedFactoryMethod());
+        assertSame(SFM, BeanDefinitions.tryResolveFactoryMethod(rbd, factoryClass()).getResolvedFactoryMethod());
     }
 
     @Test
     void testNullArgs() {
         assertForMany(illegalArgument(),
-        () -> BeanDefinitionHelper.annotatedBeanDefinitions(null, factoryClass(), ""),
-        () -> BeanDefinitionHelper.annotatedBeanDefinitions($->untyped(""), factoryClass(), (String[])null));
+        () -> BeanDefinitions.annotatedBeanDefinitions(null, factoryClass(), ""),
+        () -> BeanDefinitions.annotatedBeanDefinitions($->untyped(""), factoryClass(), (String[])null));
     }
 
     static RootBeanDefinition typed(String method, String factory) {
-        return (RootBeanDefinition)rootBeanDefinition(BeanDefinitionHelperTest.class)
+        return (RootBeanDefinition)rootBeanDefinition(BeanDefinitionsTest.class)
                 .setFactoryMethodOnBean(method, factory)
                 .getRawBeanDefinition();
     }
@@ -82,8 +82,8 @@ class BeanDefinitionHelperTest implements NoInstanceTest<BeanDefinitionHelper> {
                 .getRawBeanDefinition();
     }
 
-    static final Method SFM = findRequiredMethod(BeanDefinitionHelperTest.class, "testFactoryMethod");
-    static final Method NSFM = findRequiredMethod(BeanDefinitionHelperTest.class, "nonPublicFactoryMethod");
+    static final Method SFM = findRequiredMethod(BeanDefinitionsTest.class, "testFactoryMethod");
+    static final Method NSFM = findRequiredMethod(BeanDefinitionsTest.class, "nonPublicFactoryMethod");
     static final Method FM = findRequiredMethod(TestFactory.class, "testFactoryMethod");
     static final Method NFM = findRequiredMethod(TestFactory.class, "nonPublicFactoryMethod");
     static Function<String, Class<?>> factoryClass()   { return $ -> TestFactory.class; }

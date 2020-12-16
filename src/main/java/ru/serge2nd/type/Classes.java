@@ -5,36 +5,42 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils.MethodFilter;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
+import static java.lang.String.join;
 import static java.lang.invoke.MethodHandles.lookup;
+import static java.util.Collections.nCopies;
 import static org.springframework.util.ClassUtils.resolveClassName;
 import static org.springframework.util.ReflectionUtils.getUniqueDeclaredMethods;
+import static org.springframework.util.StringUtils.delete;
 import static ru.serge2nd.ObjectAssist.errNotInstantiable;
 
 public class Classes {
     private Classes() { throw errNotInstantiable(lookup()); }
 
+    public static final String ARRAY_MARKER   = "[";
+    public static final String INNER_SEPARATOR = "$";
+
     public static Class<?> arrayClass(Class<?> component, int dims) {
         return arrayClass(component, dims, null);
     }
-
     public static Class<?> arrayClass(Class<?> component, int dims, ClassLoader classLoader) {
         return resolveClassName(arrayClassName(component, dims), classLoader);
     }
 
     public static String arrayClassName(@NonNull Class<?> component, int dims) {
         if (dims < 1) return component.getName();
+        for (; component.isArray(); dims++) component = component.getComponentType();
+        return join("", nCopies(dims, ARRAY_MARKER)) + descriptor(component);
+    }
 
-        while (component.isArray()) {
-            component = component.getComponentType();
-            dims++;
-        }
-
-        String descriptor = descriptor(component);
-        StringBuilder result = new StringBuilder(dims + descriptor.length());
-        for(int i = 0; i < dims; i++) result.append(Types.ARRAY_MARKER);
-
-        return result.append(descriptor).toString();
+    public static String className(@NonNull Class<?> cls, Type owner) {
+        if (owner == null) return cls.getName();
+        return owner.getTypeName() + INNER_SEPARATOR + (
+                owner instanceof ParameterizedType
+                    ? delete(cls.getName(), ((ParameterizedType)owner).getRawType().getTypeName() + INNER_SEPARATOR)
+                    : cls.getSimpleName());
     }
 
     public static String descriptor(@NonNull Class<?> cls) {

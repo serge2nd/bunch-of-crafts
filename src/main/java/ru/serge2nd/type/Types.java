@@ -10,12 +10,13 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+import static java.lang.String.join;
 import static java.lang.invoke.MethodHandles.lookup;
 import static java.util.Collections.nCopies;
-import static org.springframework.util.StringUtils.delete;
-import static ru.serge2nd.type.Classes.arrayClass;
 import static ru.serge2nd.stream.util.Collecting.collect;
 import static ru.serge2nd.ObjectAssist.errNotInstantiable;
+import static ru.serge2nd.type.Classes.arrayClass;
+import static ru.serge2nd.type.Classes.className;
 
 /**
  * Discovering {@link Type} and extensions.
@@ -23,9 +24,7 @@ import static ru.serge2nd.ObjectAssist.errNotInstantiable;
 public class Types {
     private Types() { throw errNotInstantiable(lookup()); }
 
-    public static final Type[] NO_TYPES        = new Type[0];
-    public static final char   ARRAY_MARKER    = '[';
-    public static final char   INNER_SEPARATOR = '$';
+    public static final Type[] NO_TYPES = new Type[0];
 
     public static <T> Class<T> rawClass(Type type) { return rawClass(type, null); }
     @SuppressWarnings("unchecked")
@@ -36,9 +35,8 @@ public class Types {
             return rawClass(((ParameterizedType)type).getRawType());
 
         int dims = 0;
-        while (type instanceof GenericArrayType) {
+        for (; type instanceof GenericArrayType; dims++) {
             type = ((GenericArrayType)type).getGenericComponentType();
-            dims++;
         }
         if (dims > 0) return (Class<T>)arrayClass(rawClass(type), dims, classLoader);
 
@@ -70,24 +68,9 @@ public class Types {
             }
             @Override
             public String toString() {
-                StringBuilder sb = new StringBuilder();
-
-                if (owner != null) sb
-                    .append(owner.getTypeName())
-                    .append(INNER_SEPARATOR)
-                    .append(owner instanceof ParameterizedType
-                        ? delete(raw.getName(), ((ParameterizedType)owner).getRawType().getTypeName() + INNER_SEPARATOR)
-                        : raw.getSimpleName());
-                else sb
-                    .append(raw.getName());
-
-                if (typeArgs != null) {
-                    StringJoiner sj = new StringJoiner(", ", "<", ">").setEmptyValue("");
-                    for (Type t: typeArgs) sj.add(t.getTypeName());
-                    sb.append(sj.toString());
-                }
-
-                return sb.toString();
+                return className(raw, owner) + collect(typeArgs,
+                        new StringJoiner(", ", "<", ">").setEmptyValue(""),
+                        (sj, t) -> sj.add(t.getTypeName()));
             }
         };
     }
@@ -114,14 +97,10 @@ public class Types {
             @Override
             public String toString() {
                 Type t = component; int dims = 1;
-                while (t instanceof GenericArrayType) {
+                for (; t instanceof GenericArrayType; dims++) {
                     t = ((GenericArrayType)t).getGenericComponentType();
-                    dims++;
                 }
-                String typeName = t.getTypeName();
-                return collect(nCopies(dims, "[]"),
-                        new StringBuilder(typeName.length() + 2*dims).append(typeName),
-                        StringBuilder::append).toString();
+                return t.getTypeName() + join("", nCopies(dims, "[]"));
             }
         };
     }

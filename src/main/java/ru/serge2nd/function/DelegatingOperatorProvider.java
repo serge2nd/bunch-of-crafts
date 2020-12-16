@@ -19,8 +19,7 @@ import java.util.function.UnaryOperator;
  * @see OperatorProvider
  */
 public class DelegatingOperatorProvider<T> implements OperatorProvider<T> {
-    public static final DelegateMatcher<?> DEFAULT_DELEGATE_MATCHER =
-            (key, delegate, type) -> TypeUtils.isAssignable(key.getType(), type);
+    public static final DelegateMatcher<?> DEFAULT_MATCHER = (key, delegate, type) -> TypeUtils.isAssignable(key.getType(), type);
 
     //region The state & constructors
 
@@ -34,7 +33,7 @@ public class DelegatingOperatorProvider<T> implements OperatorProvider<T> {
     private final DelegateMatcher<T> delegateMatcher;
 
     @SuppressWarnings("unchecked")
-    public DelegatingOperatorProvider() { this.delegateMatcher = (DelegateMatcher<T>)DEFAULT_DELEGATE_MATCHER; }
+    public DelegatingOperatorProvider()                                            { this.delegateMatcher = (DelegateMatcher<T>)DEFAULT_MATCHER; }
     public DelegatingOperatorProvider(@NonNull DelegateMatcher<T> delegateMatcher) { this.delegateMatcher = delegateMatcher; }
     //endregion
 
@@ -62,22 +61,10 @@ public class DelegatingOperatorProvider<T> implements OperatorProvider<T> {
 
     //region Add delegates
 
-    public <U extends T>
-    void addDelegate(Class<U> clazz, OperatorProviderByClass<U> delegate) {
-        this.addDelegate(TypeWrap.of(clazz), delegate);
-    }
-    public <U extends T>
-    void addPrimaryDelegate(Class<U> clazz, OperatorProviderByClass<U> delegate) {
-        this.addPrimaryDelegate(TypeWrap.of(clazz), delegate);
-    }
-    public <U extends T>
-    void addDelegate(TypeWrap<U> type, OperatorProvider<U> delegate) {
-        doAddDelegate(type, delegate, Deque::addLast);
-    }
-    public <U extends T>
-    void addPrimaryDelegate(TypeWrap<U> type, OperatorProvider<U> delegate) {
-        doAddDelegate(type, delegate, Deque::addFirst);
-    }
+    public <U extends T> void addDelegate(Class<U> clazz, OperatorProviderByClass<U> delegate)        { this.addDelegate(TypeWrap.of(clazz), delegate); }
+    public <U extends T> void addPrimaryDelegate(Class<U> clazz, OperatorProviderByClass<U> delegate) { this.addPrimaryDelegate(TypeWrap.of(clazz), delegate); }
+    public <U extends T> void addDelegate(TypeWrap<U> type, OperatorProvider<U> delegate)             { doAddDelegate(type, delegate, Deque::addLast); }
+    public <U extends T> void addPrimaryDelegate(TypeWrap<U> type, OperatorProvider<U> delegate)      { doAddDelegate(type, delegate, Deque::addFirst); }
 
     private void doAddDelegate(@NonNull TypeWrap<? extends T> type, @NonNull OperatorProvider<? extends T> delegate,
                                BiConsumer<Deque<TypeWrap<? extends T>>, TypeWrap<? extends T>> addOp) {

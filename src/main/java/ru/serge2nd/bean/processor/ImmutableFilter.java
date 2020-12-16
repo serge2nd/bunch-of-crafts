@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.MethodMetadata;
+import ru.serge2nd.bean.processor.WrapBeanPostProcessor.BeanFilter;
 
 import java.util.function.BiPredicate;
 
@@ -11,7 +12,7 @@ import java.util.function.BiPredicate;
  * A {@link BiPredicate} being satisfied if bean type or factory method has the {@link Immutable} annotation.
  */
 @SuppressWarnings("ConstantConditions")
-public enum ImmutableFilter implements BiPredicate<BeanDefinition, Object> {
+public enum ImmutableFilter implements BeanFilter {
     INSTANCE;
     public static final String IMMUTABLE_ANN = Immutable.class.getName();
 

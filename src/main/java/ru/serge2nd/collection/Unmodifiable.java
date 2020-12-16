@@ -19,6 +19,7 @@ import static java.util.Collections.unmodifiableCollection;
  * Stubbing implementations of the {@link Collection} and {@link List} mutators.
  * Also contains factory methods to create unmodifiable collections.
  */
+@SuppressWarnings("EqualsWhichDoesntCheckParameterClass,RedundantUnmodifiable")
 public abstract class Unmodifiable<E> implements Collection<E>, NotList<E> {
 
     //region Factory methods
@@ -128,7 +129,6 @@ public abstract class Unmodifiable<E> implements Collection<E>, NotList<E> {
     }
     static final class UnmodifiableSetImpl<E> extends UnmodifiableCollection<E> implements Set<E> {
         UnmodifiableSetImpl(Set<? extends E> set) { super(set); }
-        @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
         public boolean equals(Object obj) { return this == obj || collection.equals(obj); }
         public int     hashCode()         { return collection.hashCode(); }
     }

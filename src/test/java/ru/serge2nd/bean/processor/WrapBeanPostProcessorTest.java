@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostP
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import ru.serge2nd.bean.processor.WrapBeanPostProcessor.Wrapper;
 import ru.serge2nd.collection.HardProperties;
 import ru.serge2nd.type.TypeWrap;
 import ru.serge2nd.bean.BeanCfg;
-import ru.serge2nd.bean.definition.BeanDefinitionFactory;
-import ru.serge2nd.bean.definition.BeanDefinitionFactoryImpl;
+import ru.serge2nd.bean.definition.DefaultBeanDefinitionFactory;
 import ru.serge2nd.function.DelegatingOperatorProvider;
 import ru.serge2nd.function.OperatorProvider;
 
@@ -22,9 +22,11 @@ import java.util.*;
 import static java.util.Collections.*;
 import static java.util.Optional.ofNullable;
 import static org.springframework.util.ReflectionUtils.getDeclaredMethods;
-import static ru.serge2nd.bean.BeanCfg.builder;
-import static ru.serge2nd.bean.BeanCfg.from;
-import static ru.serge2nd.bean.definition.BeanDefinitionHelper.annotatedBeanDefinitions;
+import static ru.serge2nd.bean.BeanCfg.of;
+import static ru.serge2nd.bean.BeanCfg.beanNameByClass;
+import static ru.serge2nd.bean.definition.BeanDefinitions.annotatedBeanDefinitions;
+import static ru.serge2nd.bean.definition.BeanDefinitions.register;
+import static ru.serge2nd.bean.processor.WrapBeanPostProcessor.ALL_NAMES;
 import static ru.serge2nd.collection.HardPropertiesTest.UNMOD_MAP;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
 import static ru.serge2nd.test.match.CommonMatch.equalTo;
@@ -49,15 +51,7 @@ class WrapBeanPostProcessorTest {
     static final Map<String, Integer> EXPECTEDM = singletonMap("z", "z".codePointAt(0));
     static final Map<String, String> EXPECTED_STRINGS = singletonMap("z", "z");
 
-    final TestBeanFactory beanFactory = new TestBeanFactory("testCtx"); {
-        beanFactory.addBeanPostProcessor(new WrapBeanPostProcessor(ImmutableFilter.INSTANCE, (type, bean) -> ofNullable(type)
-                .flatMap(IMMUTABLES::forType)
-                .map(w -> w.apply(bean))
-                .orElse(bean), beanFactory));
-        registerImmutableBeans(beanFactory);
-        beanFactory.forceAnnotatedBeanDefinitions();
-        beanFactory.autowireBean(this);
-    }
+    { new TestBeanFactory().autowireBean(this); }
 
     @Test void testImmutableCollection() { assertThat(
         immutableCollection               , sameClass(unmodifiableCollection(emptySet())),
@@ -111,22 +105,12 @@ class WrapBeanPostProcessorTest {
 
     @Test void testNotImmutableBean() { assertThat(notImmutableBean, sameClass(StringBuilder.class)); }
 
-    void registerImmutableBeans(TestBeanFactory bf) {
-        for (Method m : getDeclaredMethods(bf.getClass()))
-            if (m.isAnnotationPresent(Immutable.class))
-                bf.registerBean(builder()
-                        .name(m.getName())
-                        .factoryMethod(m.getName())
-                        .factoryBean(bf.name)
-                        .build());
-    }
-
     static class TestBeanFactory extends DefaultListableBeanFactory {
-        final String name;
-        TestBeanFactory(String name) {
-            this.name = name;
+        TestBeanFactory() {
+            registerBean(of(this).build());
             registerBean(new AutowiredAnnotationBeanPostProcessor());
-            registerBean(from(this, name).build());
+            registerBean(new WrapBeanPostProcessor(WRAPPER, ImmutableFilter.INSTANCE, ALL_NAMES, this));
+            registerAnnotatedBeans();
         }
 
         @Immutable Collection<String> immutableCollection() { return new AbstractCollection<String>() {
@@ -144,17 +128,21 @@ class WrapBeanPostProcessorTest {
         @Immutable Properties                    immutableProperties()        { return new Properties(){{putAll(EXPECTED_STRINGS);}}; }
         @Immutable StringBuilder                 notImmutableBean()           { return new StringBuilder(); }
 
-        void registerBean(BeanCfg beanCfg) {
-            BeanDefinitionFactory.registerBean(beanCfg, BeanDefinitionFactoryImpl.INSTANCE, this::registerBeanDefinition);
+        void registerAnnotatedBeans() {
+            String factoryName = getBeanNamesForType(getClass())[0];
+            for (Method m : getDeclaredMethods(getClass()))
+                if (m.isAnnotationPresent(Immutable.class))
+                    registerBean(BeanCfg.builder()
+                            .name(m.getName())
+                            .factoryMethod(m.getName())
+                            .factoryBean(factoryName)
+                            .build());
+            annotatedBeanDefinitions(this::getMergedBeanDefinition, this::getType, getBeanDefinitionNames())
+                    .forEach(this::registerBeanDefinition);
         }
-        @SuppressWarnings("ConstantConditions")
-        void registerBean(BeanPostProcessor beanPostProcessor) {
-            addBeanPostProcessor((BeanPostProcessor)initializeBean(beanPostProcessor, null));
-        }
-        void forceAnnotatedBeanDefinitions() {
-            annotatedBeanDefinitions(this::getMergedBeanDefinition, this::getType,
-                    getBeanDefinitionNames()).forEach(this::registerBeanDefinition);
-        }
+
+        void registerBean(BeanPostProcessor bpp) { addBeanPostProcessor((BeanPostProcessor)initializeBean(bpp, beanNameByClass(bpp.getClass()))); }
+        void registerBean(BeanCfg beanCfg)       { register(beanCfg, this::registerBeanDefinition, DefaultBeanDefinitionFactory.INSTANCE); }
     }
 
     static final OperatorProvider<Object> IMMUTABLES = new DelegatingOperatorProvider<Object>() {{
@@ -171,4 +159,8 @@ class WrapBeanPostProcessorTest {
         addDelegate(List.class,         $ -> Optional.of(Collections::<Object>unmodifiableList));
         addDelegate(Collection.class,   $ -> Optional.of(Collections::<Object>unmodifiableCollection));
     }};
+    static final Wrapper WRAPPER = (type, bean) -> ofNullable(type)
+            .flatMap(IMMUTABLES::forType)
+            .map(w -> w.apply(bean))
+            .orElse(bean);
 }

@@ -16,14 +16,5 @@ public interface BeanDefinitionFactory {
      */
     BeanDefinition from(BeanCfg beanCfg);
 
-    /**
-     * Uses provided bean configuration and bean definition factory
-     * to create bean definition and pass it to the given registration method.
-     * @param beanCfg bean configuration to build bean definition from
-     * @param factory bean definition factory
-     * @param registry bean definition registration method
-     */
-    static void registerBean(BeanCfg beanCfg, BeanDefinitionFactory factory, BiConsumer<String, BeanDefinition> registry) {
-        registry.accept(beanCfg.getName(), factory.from(beanCfg));
-    }
+
 }

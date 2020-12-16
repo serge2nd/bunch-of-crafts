@@ -4,10 +4,12 @@ import lombok.NonNull;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
+import ru.serge2nd.bean.BeanCfg;
 import ru.serge2nd.type.Classes;
 
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import static java.lang.invoke.MethodHandles.lookup;
@@ -19,10 +21,21 @@ import static ru.serge2nd.stream.MapCollectors.toMap;
 import static ru.serge2nd.ObjectAssist.errNotInstantiable;
 
 /**
- * Helpers for creating and transforming bean definitions.
+ * Helpers in creating and transforming bean definitions.
  */
-public class BeanDefinitionHelper {
-    private BeanDefinitionHelper() { throw errNotInstantiable(lookup()); }
+public class BeanDefinitions {
+    private BeanDefinitions() { throw errNotInstantiable(lookup()); }
+
+    /**
+     * Uses provided bean configuration and bean definition factory
+     * to create bean definition and pass it to the given registration method.
+     * @param beanCfg bean configuration to build bean definition from
+     * @param registry bean definition registration method
+     * @param factory bean definition factory
+     */
+    public static void register(BeanCfg beanCfg, BiConsumer<String, BeanDefinition> registry, BeanDefinitionFactory factory) {
+        registry.accept(beanCfg.getName(), factory.from(beanCfg));
+    }
 
     /**
      * Given a bean definition by-name getter, bean class by-name getter and bean names,

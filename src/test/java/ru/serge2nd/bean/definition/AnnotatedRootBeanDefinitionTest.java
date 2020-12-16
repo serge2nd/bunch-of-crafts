@@ -17,7 +17,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.beans.factory.support.BeanDefinitionBuilder.rootBeanDefinition;
-import static ru.serge2nd.bean.definition.BeanDefinitionHelperTest.SFM;
+import static ru.serge2nd.bean.definition.BeanDefinitionsTest.SFM;
 import static ru.serge2nd.test.match.AssertAllMatch.assertAllMatch;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
 import static ru.serge2nd.test.match.CommonMatch.notNullValue;
@@ -44,7 +44,7 @@ class AnnotatedRootBeanDefinitionTest {
     }
 
     static RootBeanDefinition typed() {
-        return (RootBeanDefinition)rootBeanDefinition(BeanDefinitionHelperTest.class).getRawBeanDefinition();
+        return (RootBeanDefinition)rootBeanDefinition(BeanDefinitionsTest.class).getRawBeanDefinition();
     }
     @SuppressWarnings("ConstantConditions")
     static RootBeanDefinition untyped() {

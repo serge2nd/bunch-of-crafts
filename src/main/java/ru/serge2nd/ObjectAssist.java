@@ -13,6 +13,7 @@ import static java.lang.System.arraycopy;
 import static java.lang.invoke.MethodHandles.lookup;
 import static java.lang.reflect.Array.getLength;
 import static java.lang.reflect.Array.newInstance;
+import static java.util.Collections.singleton;
 import static org.springframework.util.ObjectUtils.isArray;
 
 public class ObjectAssist {
@@ -23,13 +24,11 @@ public class ObjectAssist {
         if (v == null) throw new IllegalArgumentException(msg);
         return v;
     }
-
     @NonNull
     public static <V, T extends Throwable> V nullSafe(@Nullable V v, String msg, Function<String, T> err) {
         if (v == null) throwSneaky(err.apply(msg));
         return v;
     }
-
     @NonNull
     public static <V, T extends Throwable> V nullSafe(@Nullable V v, Supplier<T> err) {
         if (v == null) throwSneaky(err.get());
@@ -105,7 +104,7 @@ public class ObjectAssist {
         return countElems(obj);
     }
 
-    @SuppressWarnings("SuspiciousSystemArraycopy")
+    @SuppressWarnings("unchecked,rawtypes,SuspiciousSystemArraycopy")
     private static Object fillFlatArray(Object a, Object flat) {
         assert isArray(a)    : "required an array as the first arg";
         assert isArray(flat) : "required an array as the second arg";
@@ -115,40 +114,33 @@ public class ObjectAssist {
         }
 
         int i = 0;
-        Deque<Object> stack = new LinkedList<>();
-        stack.push(a);
-
-        while (!stack.isEmpty()) {
+        for (Deque stack = new LinkedList(singleton(a)); !stack.isEmpty(); a = stack.pop()) {
             int len = getLength(a);
             if (!a.getClass().getComponentType().isArray()) {
                 arraycopy(a, 0, flat, i, len);
                 i += len;
             } else {
                 Object[] aa = (Object[])a;
-                for (int k = len - 1; k >= 0; k--)
-                    stack.push(aa[k]);
+                for (int j = 0; j < len; j++)
+                    stack.push(aa[len - j - 1]);
             }
-            a = stack.pop();
         }
 
         return flat;
     }
 
+    @SuppressWarnings("unchecked,rawtypes")
     private static int countElems(Object a) {
         assert isArray(a) : "required an array as the first arg";
         if (!a.getClass().getComponentType().isArray())
             return getLength(a);
 
         int elems = 0;
-        Deque<Object> stack = new LinkedList<>();
-        stack.push(a);
-
-        while (!stack.isEmpty()) {
+        for (Deque stack = new LinkedList(singleton(a)); !stack.isEmpty(); a = stack.pop()) {
             if (!a.getClass().getComponentType().isArray())
                 elems += getLength(a);
             else for (Object e : (Object[])a)
                 stack.push(e);
-            a = stack.pop();
         }
 
         return elems;

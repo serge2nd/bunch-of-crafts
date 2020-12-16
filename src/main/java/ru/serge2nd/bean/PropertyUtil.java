@@ -29,7 +29,7 @@ public class PropertyUtil {
                                                        @NonNull NameTransformer transformer,
                                                        @NonNull String... prefixes) {
         return names -> collect(names, toMap(
-                name -> transformer.apply(name, findPrefix(name, prefixes)),
+                name -> transformer.applyTo(name, findPrefix(name, prefixes)),
                 propertyGetter,
                 NON_NULL | UNMODIFIABLE));
     }
