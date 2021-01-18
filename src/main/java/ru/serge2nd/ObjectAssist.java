@@ -1,8 +1,10 @@
 package ru.serge2nd;
 
+import lombok.SneakyThrows;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles.Lookup;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -11,6 +13,7 @@ import java.util.function.Supplier;
 
 import static java.lang.System.arraycopy;
 import static java.lang.invoke.MethodHandles.lookup;
+import static java.lang.invoke.MethodType.methodType;
 import static java.lang.reflect.Array.getLength;
 import static java.lang.reflect.Array.newInstance;
 import static java.util.Collections.singleton;
@@ -19,21 +22,37 @@ import static org.springframework.util.ObjectUtils.isArray;
 public class ObjectAssist {
     private ObjectAssist() { throw errNotInstantiable(lookup()); }
 
+    private static final String P_NULL_REF_ERROR_TYPE = "nullRefErrorType";
+    private static final MethodHandle NULL_REF_ERROR_CONSTRUCTOR;
+
+    static { try {
+        String errorTypeName = System.getProperty(P_NULL_REF_ERROR_TYPE);
+        Class<?> errorType = errorTypeName != null
+                ? Class.forName(errorTypeName)
+                : IllegalArgumentException.class;
+        if (!Throwable.class.isAssignableFrom(errorType)) throw new IllegalArgumentException("not throwable: " + errorType.getName());
+        NULL_REF_ERROR_CONSTRUCTOR = lookup().findConstructor(errorType, methodType(void.class, String.class));
+    } catch (Exception e) {
+        throw new IllegalStateException(ObjectAssist.class.getName() + " initialization failed", e);
+    }}
+
     @NonNull
     public static <V> V nullSafe(@Nullable V v, String msg) {
-        if (v == null) throw new IllegalArgumentException(msg);
+        if (v == null) throwNullRefError(msg);
         return v;
     }
     @NonNull
-    public static <V, T extends Throwable> V nullSafe(@Nullable V v, String msg, Function<String, T> err) {
+    public static <V> V nullSafe(@Nullable V v, String msg, Function<String, ? extends Throwable> err) {
         if (v == null) throwSneaky(err.apply(msg));
         return v;
     }
     @NonNull
-    public static <V, T extends Throwable> V nullSafe(@Nullable V v, Supplier<T> err) {
+    public static <V> V nullSafe(@Nullable V v, Supplier<? extends Throwable> err) {
         if (v == null) throwSneaky(err.get());
         return v;
     }
+    @SneakyThrows
+    static void throwNullRefError(String msg) { throw (Throwable)NULL_REF_ERROR_CONSTRUCTOR.invoke(msg); }
 
     @SuppressWarnings("unchecked")
     public static <T extends Throwable> void throwSneaky(Throwable t) throws T { throw (T)t; }

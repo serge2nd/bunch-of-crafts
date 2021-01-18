@@ -1,5 +1,7 @@
 package ru.serge2nd.collection;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -15,7 +17,7 @@ import java.util.stream.Stream;
  * to facilitate implementation of {@link Collection}-based interfaces.
  * @see Unmodifiable
  */
-public abstract class UnmodifiableCollection<E> extends Unmodifiable<E> {
+public abstract class UnmodifiableCollection<E> extends Unmodifiable<E> implements Collection<E> {
     protected final Collection<E> collection;
     @SuppressWarnings("unchecked")
     public UnmodifiableCollection(Collection<? extends E> collection) {
@@ -53,12 +55,15 @@ public abstract class UnmodifiableCollection<E> extends Unmodifiable<E> {
     @Override
     public final Stream<E>      parallelStream()                    { return collection.parallelStream(); }
     @Override
-    public final Iterator<E>    iterator()                          { return new Iterator<E>() {
-        final Iterator<E> it     = collection.iterator();
-        public boolean hasNext() { return it.hasNext();}
-        public E       next()    { return it.next();}
+    public final Iterator<E>    iterator()                          { return new Itr<>(collection.iterator()); }
+    //endregion
+
+    @RequiredArgsConstructor
+    static class Itr<E> implements Iterator<E> {
+        final Iterator<E> it;
+        public boolean hasNext() { return it.hasNext(); }
+        public E       next()    { return it.next(); }
         public void    forEachRemaining(Consumer<? super E> action) { it.forEachRemaining(action); }
         public void    remove()  { throw errNotModifiable(); }
-    }; }
-    //endregion
+    }
 }

@@ -24,8 +24,7 @@ import static ru.serge2nd.stream.util.Collecting.collect;
  * @see Characteristics
  */
 public final class CharacteristicSet extends Unmodifiable<Characteristics> implements Set<Characteristics> {
-    private static final Characteristics[] V = Characteristics.values();
-    private final int mask;
+    final int mask;
 
     // region Constructors & related helpers
 
@@ -70,10 +69,10 @@ public final class CharacteristicSet extends Unmodifiable<Characteristics> imple
         int size = size();
         if (a.length < size) a = (T[])newInstance(a.getClass().getComponentType(), size);
 
-        T[] v = (T[])V;
-        for (int mask = this.mask, i, j = 0; mask != 0; mask = mask >>> i << i, j++) {
+        int mask = this.mask; T[] v = (T[])V;
+        for (int i, j = 0; mask != 0; mask = mask >>> i << i) {
             i = numberOfTrailingZeros(mask);
-            a[j] = v[i++];
+            a[j++] = v[i++];
         }
 
         return a;
@@ -94,7 +93,8 @@ public final class CharacteristicSet extends Unmodifiable<Characteristics> imple
     public int hashCode() { return mask; }
     @Override
     public String toString() {
-        return isEmpty() ? "[]" : collect(this, new StringJoiner(", ", "[", "]"),
+        return isEmpty() ? "[]" : collect(this,
+                new StringJoiner(", ", "[", "]"),
                 (sj, c) -> sj.add(String.valueOf(c)))
                 .toString();
     }
@@ -126,9 +126,8 @@ public final class CharacteristicSet extends Unmodifiable<Characteristics> imple
             return c;
         }
         @Override
-        public void forEachRemaining(Consumer<? super Characteristics> action) {
-            mask = forEachCharacteristic(mask, action);
-        }
+        public void forEachRemaining(Consumer<? super Characteristics> action) { mask = forEachCharacteristic(mask, action); }
+
         @Override /* For debug purposes */
         public String toString() { return Iterator.class.getSimpleName() + "<" + Characteristics.class.getSimpleName() + ">(0x" + toHexString(mask) + ")"; }
     }; }
@@ -148,7 +147,6 @@ public final class CharacteristicSet extends Unmodifiable<Characteristics> imple
             }
             return false;
         }
-
         @Override
         public Spliterator<Characteristics> trySplit() {
             int mask = this.mask, size = bitCount(mask);
@@ -163,11 +161,8 @@ public final class CharacteristicSet extends Unmodifiable<Characteristics> imple
             this.mask ^= mask;
             return new CharacteristicsSpliterator(mask);
         }
-
         @Override
-        public void forEachRemaining(@NonNull Consumer<? super Characteristics> action) {
-            mask = forEachCharacteristic(mask, action);
-        }
+        public void forEachRemaining(@NonNull Consumer<? super Characteristics> action) { mask = forEachCharacteristic(mask, action); }
 
         @Override
         public long estimateSize()        { return bitCount(mask); }
@@ -180,11 +175,13 @@ public final class CharacteristicSet extends Unmodifiable<Characteristics> imple
         public String toString() { return getClass().getSimpleName() + "(0x" + toHexString(mask) + ")"; }
     }
 
-    private static int forEachCharacteristic(int mask, Consumer<? super Characteristics> action) {
+    static int forEachCharacteristic(int mask, Consumer<? super Characteristics> action) {
         for (int i; mask != 0; mask = mask >>> i << i) {
             i = numberOfTrailingZeros(mask);
             action.accept(V[i++]);
         }
         return mask;
     }
+
+    static final Characteristics[] V = Characteristics.values();
 }

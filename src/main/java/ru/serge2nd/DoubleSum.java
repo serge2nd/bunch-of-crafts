@@ -86,15 +86,16 @@ public class DoubleSum {
      * @param x value to add
      * @param order compensation order (number of compensating values)
      * @return the first arg
-     * @see <a href="https://doi.org/10.1007%2Fs00607-005-0139-x">Klein (2006). "A generalized Kahan–Babuška-Summation-Algorithm". Computing. Springer-Verlag. 76 (3–4): 279–293</a>
+     * @see <a href="https://doi.org/10.1007%2Fs00607-005-0139-x">
+     *     Klein (2006). "A generalized Kahan–Babuška-Summation-Algorithm". Computing. Springer-Verlag. 76 (3–4): 279–293</a>
      */
     public static double[] iterativeKBSum(double[] sum, double x, int order) {
         for (int i = 0; i < order; i++)
-            x = compensation(sum, x, i);
+            x = compensationStep(sum, x, i);
         sum[order] += x; return sum;
     }
 
-    public static double compensation(double[] sum, double x, int i) {
+    public static double compensationStep(double[] sum, double x, int i) {
         double aSum = sum[i] + x;
         double c = abs(sum[i]) >= abs(x)
             ? (sum[i] - aSum) + x  // recover x part

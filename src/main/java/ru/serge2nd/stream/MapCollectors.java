@@ -1,5 +1,6 @@
 package ru.serge2nd.stream;
 
+import ru.serge2nd.misc.BitsResolver;
 import ru.serge2nd.stream.util.Accumulators.Accumulator;
 import ru.serge2nd.stream.util.Collecting.NoFeatures;
 import ru.serge2nd.stream.util.Collecting.IdentityFinish;
@@ -71,7 +72,7 @@ public class MapCollectors {
     }
 
     static <E, K, V> Collector<E, ?, Map<K, V>> forMap(BiConsumer<Map<K, V>, E> a, int opts) {
-        return has(UNMODIFIABLE, opts) ? new ToUnmodifiableMap<>(a) : new ToSimpleMap<>(a);
+        return BitsResolver.has(UNMODIFIABLE, opts) ? new ToUnmodifiableMap<>(a) : new ToSimpleMap<>(a);
     }
     //endregion
 }

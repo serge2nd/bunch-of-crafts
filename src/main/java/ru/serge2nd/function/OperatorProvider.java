@@ -6,14 +6,14 @@ import java.util.function.UnaryOperator;
 
 /**
  * A provider of an unary operator to apply to objects of the particular type.
- * @param <T> type for which the operator provider is assumed
+ * @param <T> type which this operator provider accepts
  */
 public interface OperatorProvider<T> {
 
     /**
      * The result is the unary operator for the given type.
-     * @param type type
-     * @return the unary operator for the given type
+     * @param type the type
+     * @return the unary operator for the given type or {@link Optional#empty()} if that type not supported
      */
     Optional<UnaryOperator<T>> forType(Type type);
 }

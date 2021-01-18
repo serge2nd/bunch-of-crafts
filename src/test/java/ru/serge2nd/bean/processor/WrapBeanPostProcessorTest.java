@@ -10,7 +10,6 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import ru.serge2nd.bean.processor.WrapBeanPostProcessor.Wrapper;
 import ru.serge2nd.collection.HardProperties;
-import ru.serge2nd.type.TypeWrap;
 import ru.serge2nd.bean.BeanCfg;
 import ru.serge2nd.bean.definition.DefaultBeanDefinitionFactory;
 import ru.serge2nd.function.DelegatingOperatorProvider;
@@ -31,6 +30,7 @@ import static ru.serge2nd.collection.HardPropertiesTest.UNMOD_MAP;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
 import static ru.serge2nd.test.match.CommonMatch.equalTo;
 import static ru.serge2nd.test.match.CommonMatch.sameClass;
+import static ru.serge2nd.type.TypeWrap.type;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @SuppressWarnings("RedundantUnmodifiable")
@@ -151,7 +151,7 @@ class WrapBeanPostProcessorTest {
         addDelegate(SortedMap.class,    $ -> Optional.of(Collections::<Object, Object>unmodifiableSortedMap));
         addDelegate(Map.class,          $ -> Optional.of(Collections::<Object, Object>unmodifiableMap));
         addPrimaryDelegate(
-                TypeWrap.of(Map.class, String.class, String.class),
+                type(Map.class, String.class, String.class),
                 $ -> Optional.of(HardProperties::of));
         addDelegate(NavigableSet.class, $ -> Optional.of(Collections::<Object>unmodifiableNavigableSet));
         addDelegate(SortedSet.class,    $ -> Optional.of(Collections::<Object>unmodifiableSortedSet));

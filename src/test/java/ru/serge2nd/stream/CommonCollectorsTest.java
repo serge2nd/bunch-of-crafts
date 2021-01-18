@@ -23,8 +23,8 @@ import static java.util.stream.Collector.Characteristics.UNORDERED;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static ru.serge2nd.stream.util.Accumulators.collectionAdd;
-import static ru.serge2nd.stream.util.Accumulators.collectionNonNullAdd;
+import static ru.serge2nd.stream.util.Accumulators.adding;
+import static ru.serge2nd.stream.util.Accumulators.addingNonNull;
 import static ru.serge2nd.stream.util.Collecting.*;
 import static ru.serge2nd.stream.util.CollectingOptions.NON_NULL;
 import static ru.serge2nd.stream.util.CollectingOptions.UNMODIFIABLE;
@@ -51,25 +51,25 @@ class CommonCollectorsTest implements NoInstanceTest<CommonCollectors> {
         */
         //      1                2                       3                   4                   5
         arguments(CommonCollectors.toList(0), // 0
-                ArrayList.class, collectionAdd()       , toFirstCombiner() , ArrayList.class   , S_IDENTITY_FINISH),
+                ArrayList.class, adding()       , toFirstCombiner() , ArrayList.class   , S_IDENTITY_FINISH),
         arguments(CommonCollectors.toList(UNMODIFIABLE),
-                ArrayList.class, collectionAdd()       , toFirstCombiner() , Unmodifiable.class, emptySet()),
+                ArrayList.class, adding()       , toFirstCombiner() , Unmodifiable.class, emptySet()),
         arguments(CommonCollectors.toList(NON_NULL),
-                ArrayList.class, collectionNonNullAdd(), toFirstCombiner() , ArrayList.class   , S_IDENTITY_FINISH),
+                ArrayList.class, addingNonNull(), toFirstCombiner() , ArrayList.class   , S_IDENTITY_FINISH),
         arguments(CommonCollectors.toList(UNMODIFIABLE | NON_NULL),
-                ArrayList.class, collectionNonNullAdd(), toFirstCombiner() , Unmodifiable.class, emptySet()),
+                ArrayList.class, addingNonNull(), toFirstCombiner() , Unmodifiable.class, emptySet()),
         arguments(CommonCollectors.toSet(0),
-                HashSet.class  , collectionAdd()       , toLargerCombiner(), HashSet.class     , S_IDENTITY_FINISH_UNORDERED),
+                HashSet.class  , adding()       , toLargerCombiner(), HashSet.class     , S_IDENTITY_FINISH_UNORDERED),
         arguments(CommonCollectors.toSet(UNMODIFIABLE),
-                HashSet.class  , collectionAdd()       , toLargerCombiner(), Unmodifiable.class, S_UNORDERED),
+                HashSet.class  , adding()       , toLargerCombiner(), Unmodifiable.class, S_UNORDERED),
         arguments(CommonCollectors.toSet(NON_NULL),
-                HashSet.class  , collectionNonNullAdd(), toLargerCombiner(), HashSet.class     , S_IDENTITY_FINISH_UNORDERED),
+                HashSet.class  , addingNonNull(), toLargerCombiner(), HashSet.class     , S_IDENTITY_FINISH_UNORDERED),
         arguments(CommonCollectors.toSet(UNMODIFIABLE | NON_NULL),
-                HashSet.class  , collectionNonNullAdd(), toLargerCombiner(), Unmodifiable.class, S_UNORDERED),
-        arguments(CommonCollectors.to(TreeSet::new, 0, UNORDERED),
-                TreeSet.class  , collectionAdd()       , toFirstCombiner() , TreeSet.class     , S_IDENTITY_FINISH_UNORDERED),
-        arguments(CommonCollectors.to(concurSet(), UNMODIFIABLE | NON_NULL, UNORDERED, CONCURRENT),
-                CONCUR_SET_CLS , collectionNonNullAdd(), toFirstCombiner() , Unmodifiable.class, new HashSet(){{add(UNORDERED);add(CONCURRENT);}})); }
+                HashSet.class  , addingNonNull(), toLargerCombiner(), Unmodifiable.class, S_UNORDERED),
+        arguments(CommonCollectors.to(TreeSet::new, 0, M_UNORDERED),
+                TreeSet.class  , adding()       , toFirstCombiner() , TreeSet.class     , S_IDENTITY_FINISH_UNORDERED),
+        arguments(CommonCollectors.to(concurSet(), UNMODIFIABLE | NON_NULL, M_UNORDERED | M_CONCURRENT),
+                CONCUR_SET_CLS , addingNonNull(), toFirstCombiner() , Unmodifiable.class, new HashSet(){{add(UNORDERED);add(CONCURRENT);}})); }
 
     @ParameterizedTest @MethodSource("collectorsProvider")
     void testTo(Collector<?, Object, ?> collector, Class<?> aCls,

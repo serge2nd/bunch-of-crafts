@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.serge2nd.NoInstanceTest;
+import ru.serge2nd.misc.BitsResolver;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -51,13 +52,13 @@ class MapCollectorsTest implements NoInstanceTest<MapCollectors> {
                                                   , GET_YEAR_OR_NULL, TO_STR_OR_NULL, NON_NULL | NON_NULL_VAL, HashMap.class)); }
     @ParameterizedTest @MethodSource("toMapArgsProvider")
     void testToMapKey(List<LocalDate>[] src, Function<LocalDate, Integer> key, Object $, int opts, Class<?> expectedCls) {
-        if (has(NON_NULL_VAL, opts)) src[0] = src[0].stream().filter(d -> d.getYear() != 1).collect(toList());
+        if (BitsResolver.has(NON_NULL_VAL, opts)) src[0] = src[0].stream().filter(d -> d.getYear() != 1).collect(toList());
         Map<Integer, LocalDate> result = collect(src[0], MapCollectors.toMapKey(key, opts));
         assertThat(result, sameClass(expectedCls), equalTo(singletonMap(key.apply(src[0].get(0)), src[0].get(0))));
     }
     @ParameterizedTest @MethodSource("toMapArgsProvider")
     void testToMapVal(List<LocalDate>[] src, Object $, Function<LocalDate, String> val, int opts, Class<?> expectedCls) {
-        if (has(NON_NULL, opts)) src[0] = src[0].stream().filter(d -> d.getYear() != 0).collect(toList());
+        if (BitsResolver.has(NON_NULL, opts)) src[0] = src[0].stream().filter(d -> d.getYear() != 0).collect(toList());
         Map<LocalDate, String> result = collect(src[0], MapCollectors.toMap(val, opts));
         assertThat(result, sameClass(expectedCls), equalTo(singletonMap(src[0].get(0), val.apply(src[0].get(0)))));
     }

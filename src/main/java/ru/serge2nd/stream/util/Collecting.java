@@ -1,6 +1,7 @@
 package ru.serge2nd.stream.util;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -15,8 +16,8 @@ import static java.util.Collections.emptySet;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collector.Characteristics.IDENTITY_FINISH;
 import static ru.serge2nd.ObjectAssist.nullSafe;
-import static ru.serge2nd.stream.util.Accumulators.collectionAdd;
-import static ru.serge2nd.stream.util.Accumulators.collectionNonNullAdd;
+import static ru.serge2nd.stream.util.Accumulators.adding;
+import static ru.serge2nd.stream.util.Accumulators.addingNonNull;
 import static ru.serge2nd.stream.util.WithCharacteristics.*;
 import static ru.serge2nd.ObjectAssist.errNotInstantiable;
 
@@ -28,7 +29,7 @@ import static ru.serge2nd.ObjectAssist.errNotInstantiable;
 public class Collecting {
     private Collecting() { throw errNotInstantiable(lookup()); }
 
-    //region Do collecting
+    //region Direct collecting
 
     /**
      * Sequentially collects the elements with the given collector without using {@link java.util.stream.Stream}.
@@ -120,16 +121,16 @@ public class Collecting {
 
     /**
      * Same as {@link #collect(Iterable, Object, BiConsumer)} but iterates on the result of {@link Collection#toArray()}.
-     * That may give a little boost on small array-based collections where {@link Collection#toArray() toArray()} returns copy of the underlying array.
+     * This may give a little boost on small array-based collections where {@link Collection#toArray() toArray()} returns copy of the underlying array.
      */
     public static <E, A> A gather(@NonNull Collection<? extends E> collection, @NonNull A a, @NonNull BiConsumer<A, E> accumulator) {
         E[] elements = (E[])collection.toArray();
         for (E e : elements) accumulator.accept(a, e); return a;
     }
 
-    private static <A> A                 a(Collector<?, A, ?> collector)  { return nullSafe(collector.supplier(), "no supplier").get(); }
-    private static <A, R> Function<A, R> f(Collector<?, A, R> collector)  { return nullSafe(collector.finisher(), "no finisher"); }
-    private static Set<Characteristics>  cs(Collector<?, ?, ?> collector) { return nullSafe(collector.characteristics(), "no characteristics"); }
+    static <A> A                 a(Collector<?, A, ?> collector)  { return nullSafe(collector.supplier(), "no supplier").get(); }
+    static <A, R> Function<A, R> f(Collector<?, A, R> collector)  { return nullSafe(collector.finisher(), "no finisher"); }
+    static Set<Characteristics>  cs(Collector<?, ?, ?> collector) { return nullSafe(collector.characteristics(), "no characteristics"); }
     //endregion
 
     //region Characteristics mixins
@@ -159,21 +160,40 @@ public class Collecting {
     }
     @SuppressWarnings("rawtypes")
     public interface NonNullToSet<E, S extends Set, R> extends ToSet<E, S, R> {
-        @Override default BiConsumer<S, E>  accumulator() { return collectionNonNullAdd(); }
+        @Override default BiConsumer<S, E>  accumulator() { return addingNonNull(); }
     }
     @SuppressWarnings("rawtypes")
     public interface ToCollection<E, C extends Collection, R> extends Collector<E, C, R> {
         @Override default Supplier<C>       supplier()    { return () -> (C)new ArrayList<>(); }
-        @Override default BiConsumer<C, E>  accumulator() { return collectionAdd(); }
+        @Override default BiConsumer<C, E>  accumulator() { return adding(); }
         @Override default BinaryOperator<C> combiner()    { return toFirstCombiner(); }
     }
     @SuppressWarnings("rawtypes")
     public interface NonNullToCollection<E, C extends Collection, R> extends ToCollection<E, C, R> {
-        @Override default BiConsumer<C, E>  accumulator() { return collectionNonNullAdd(); }
+        @Override default BiConsumer<C, E>  accumulator() { return addingNonNull(); }
     }
-    public interface ToStringJoiner<E, R> extends Collector<E, StringJoiner, R> {
-        @Override default BiConsumer<StringJoiner, E> accumulator() { return (sj, e) -> sj.add(String.valueOf(e)); }
-        @Override default BinaryOperator<StringJoiner> combiner()   { return StringJoiner::merge; }
+    //endregion
+
+    //region Collecting to StringJoiner
+
+    public static abstract class ToStringJoiner<E, R> extends ToStringJoinerBase<E, R> {
+        @Override public final BiConsumer<StringJoiner, E> accumulator() { return (sj, e) -> sj.add(String.valueOf(e)); }
+        public ToStringJoiner(Supplier<StringJoiner> supplier) { super(supplier); }
+    }
+    public static abstract class NonNullToStringJoiner<E, R> extends ToStringJoinerBase<E, R> {
+        @Override public final BiConsumer<StringJoiner, E> accumulator() { return (sj, e) -> {if (e != null) sj.add(String.valueOf(e));}; }
+        public NonNullToStringJoiner(Supplier<StringJoiner> supplier) { super(supplier); }
+    }
+    public static abstract class CustomToStringJoiner<E, R> extends ToStringJoinerBase<E, R> {
+        @Override public final BiConsumer<StringJoiner, E> accumulator() { return accumulator; }
+        public CustomToStringJoiner(Supplier<StringJoiner> supplier, @NonNull BiConsumer<StringJoiner, E> accumulator) { super(supplier); this.accumulator = accumulator; }
+        final BiConsumer<StringJoiner, E> accumulator;
+    }
+    @RequiredArgsConstructor
+    static abstract class ToStringJoinerBase<E, R> implements Collector<E, StringJoiner, R> {
+        @Override public final Supplier<StringJoiner>       supplier() { return supplier; }
+        @Override public final BinaryOperator<StringJoiner> combiner() { return StringJoiner::merge; }
+        final @NonNull Supplier<StringJoiner> supplier;
     }
     //endregion
 

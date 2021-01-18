@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.serge2nd.NoInstanceTest;
 import ru.serge2nd.collection.Unmodifiable;
+import ru.serge2nd.misc.BitsResolver;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -60,7 +61,7 @@ class MappingCollectorsTest implements NoInstanceTest<MappingCollectors> {
                           BiFunction<Function<?, ?>, Integer, Collector<LocalDate, ?, Collection<?>>> collector,
                           int opts, Class<?> expectedCls) {
         Collection<LocalDate> src = supplier.get(); src.addAll(asList(NOW, NOW.withYear(0)));
-        Collection<?> expected = (Collection)(has(NON_NULL, opts)
+        Collection<?> expected = (Collection)(BitsResolver.has(NON_NULL, opts)
                 ? src.stream().map(GET_YEAR_OR_NULL).filter(Objects::nonNull).collect(toCollection(supplier))
                 : src.stream().map(GET_YEAR_OR_NULL).collect(toCollection(supplier)));
 
@@ -92,7 +93,7 @@ class MappingCollectorsTest implements NoInstanceTest<MappingCollectors> {
                               BiFunction<Function<?, ?>, Integer, Collector<Integer, ?, Collection<?>>> collector,
                               int opts, Class<?> expectedCls) {
         Collection<Integer> src = supplier.get(); src.addAll(asList(0, 1, -5));
-        Collection<?> expected = (Collection)(has(NON_NULL, opts)
+        Collection<?> expected = (Collection)(BitsResolver.has(NON_NULL, opts)
                 ? src.stream().map(ABS_ARRAY_OR_NULL).filter(a -> a != null && a[0] != null).flatMap(Stream::of).collect(toCollection(supplier))
                 : src.stream().map(ABS_ARRAY_OR_NULL).filter(Objects::nonNull).flatMap(Stream::of).collect(toCollection(supplier)));
 

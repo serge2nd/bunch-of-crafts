@@ -1,6 +1,5 @@
 package ru.serge2nd;
 
-import java.math.BigDecimal;
 import java.util.Random;
 
 import static java.lang.Math.abs;
@@ -50,11 +49,11 @@ public class Tmp {
 
     public static float[] iterativeKBSum(float[] sum, float x, int order) {
         for (int i = 0; i < order; i++)
-            x = compensation(sum, x, i);
+            x = compensationStep(sum, x, i);
         sum[order] += x; return sum;
     }
 
-    public static float compensation(float[] sum, float x, int i) {
+    public static float compensationStep(float[] sum, float x, int i) {
         float aSum = sum[i] + x;
         float c = abs(sum[i]) >= abs(x)
             ? (sum[i] - aSum) + x

@@ -1,6 +1,6 @@
 package ru.serge2nd.stream;
 
-import lombok.NonNull;
+import ru.serge2nd.misc.BitsResolver;
 import ru.serge2nd.stream.util.CollectingOptions;
 import ru.serge2nd.collection.Unmodifiable;
 import ru.serge2nd.stream.util.Accumulators.Accumulator;
@@ -30,23 +30,23 @@ public class MappingCollectors {
     //region Factory methods
 
     public static <E> Collector<E, ?, String> mapToStr(Function<E, ?> mapping, Supplier<StringJoiner> supplier, int opts) {
-        return new ToString<>(supplier, mappingToStrAccumulator(mapping, opts));
+        return new ToString<>(supplier, mappingToStr(mapping, opts));
     }
     public static <E, F> Collector<E, ?, Set<F>>  mapToSet(Function<E, F> mapping, int opts) {
-        return forSet(mappingAccumulator(mapping, opts), opts);
+        return forSet(mapping(mapping, opts), opts);
     }
     public static <E, F> Collector<E, ?, List<F>> mapToList(Function<E, F> mapping, int opts) {
-        return forList(mappingAccumulator(mapping, opts), opts);
+        return forList(mapping(mapping, opts), opts);
     }
 
     public static <E> Collector<E, ?, String> aFlatMapToStr(Function<E, ? extends Object[]> mapping, Supplier<StringJoiner> supplier, int opts) {
-        return new ToString<>(supplier, aFlatMappingToStrAccumulator(mapping, opts));
+        return new ToString<>(supplier, aFlatMappingToStr(mapping, opts));
     }
     public static <E, F> Collector<E, ?, Set<F>> aFlatMapToSet(Function<E, F[]> mapping, int opts) {
-        return forSet(aFlatMappingAccumulator(mapping, opts), opts);
+        return forSet(aFlatMapping(mapping, opts), opts);
     }
     public static <E, F> Collector<E, ?, List<F>> aFlatMapToList(Function<E, F[]> mapping, int opts) {
-        return forList(aFlatMappingAccumulator(mapping, opts), opts);
+        return forList(aFlatMapping(mapping, opts), opts);
     }
     //endregion
 
@@ -68,19 +68,16 @@ public class MappingCollectors {
     static final class ToSimpleList<E, F, L extends List<F>> extends Accumulator<E, L, L> implements ToCollection<E, L, L>, IdentityFinish<E, L> {
         ToSimpleList(BiConsumer<L, E> a) { super(a); }
     }
-    static final class ToString<E> extends CommonCollectors.ToString<E> {
-        @Override public BiConsumer<StringJoiner, E> accumulator() { return accumulator; }
-        final BiConsumer<StringJoiner, E> accumulator;
-        ToString(Supplier<StringJoiner> supplier, @NonNull BiConsumer<StringJoiner, E> accumulator) {
-            super(supplier); this.accumulator = accumulator;
-        }
+    static final class ToString<E> extends CustomToStringJoiner<E, String> implements NoFeatures<E, StringJoiner, String> {
+        @Override public Function<StringJoiner, String> finisher() { return StringJoiner::toString; }
+        ToString(Supplier<StringJoiner> supplier, BiConsumer<StringJoiner, E> accumulator) { super(supplier, accumulator);}
     }
 
     static <E, F> Collector<E, ?, Set<F>> forSet(BiConsumer<Set<F>, E> a, int opts) {
-        return has(UNMODIFIABLE, opts) ? new ToUnmodifiableSet<>(a) : new ToSimpleSet<>(a);
+        return BitsResolver.has(UNMODIFIABLE, opts) ? new ToUnmodifiableSet<>(a) : new ToSimpleSet<>(a);
     }
     static <E, F> Collector<E, ?, List<F>> forList(BiConsumer<List<F>, E> a, int opts) {
-        return has(UNMODIFIABLE, opts) ? new ToUnmodifiableList<>(a) : new ToSimpleList<>(a);
+        return BitsResolver.has(UNMODIFIABLE, opts) ? new ToUnmodifiableList<>(a) : new ToSimpleList<>(a);
     }
     //endregion
 }

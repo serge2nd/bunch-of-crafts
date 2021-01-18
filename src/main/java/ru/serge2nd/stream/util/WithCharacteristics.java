@@ -43,6 +43,8 @@ public abstract class WithCharacteristics<E, A, R> implements Collector<E, A, R>
 
     public static final int M_IDENTITY_FINISH           = mask(IDENTITY_FINISH);
     public static final int M_UNORDERED                 = mask(UNORDERED);
+    public static final int M_CONCURRENT                = mask(CONCURRENT);
+
     public static final int M_IDENTITY_FINISH_UNORDERED = M_IDENTITY_FINISH | M_UNORDERED;
 
     public static final Set<Characteristics> S_IDENTITY_FINISH           = BY_MASK.get(M_IDENTITY_FINISH);

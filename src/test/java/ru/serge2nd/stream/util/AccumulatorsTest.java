@@ -19,23 +19,23 @@ class AccumulatorsTest implements NoInstanceTest<Accumulators> {
 
     @Test
     void testCollectionNonNullAdd() {
-        List<?> l = new ArrayList<>(); Accumulators.collectionNonNullAdd().accept(l, 0);
+        List<?> l = new ArrayList<>(); Accumulators.addingNonNull().accept(l, 0);
         assertThat(l, contains(0));
     }
     @Test
     void testCollectionNonNullAddNull() {
-        List<?> l = new ArrayList<>(); Accumulators.collectionNonNullAdd().accept(l, null);
+        List<?> l = new ArrayList<>(); Accumulators.addingNonNull().accept(l, null);
         assertThat(l, empty());
     }
 
     @Test @SuppressWarnings("ResultOfMethodCallIgnored")
     void testNullArgs() {
         assertForMany(illegalArgument(),
-        () -> Accumulators.filteringAccumulator(null, 0),
-        () -> Accumulators.filteringToStrAccumulator(null, 0),
-        () -> Accumulators.mappingAccumulator(null, 0),
-        () -> Accumulators.mappingToStrAccumulator(null, 0),
-        () -> Accumulators.aFlatMappingAccumulator(null, 0),
-        () -> Accumulators.aFlatMappingToStrAccumulator(null, 0));
+        () -> Accumulators.filtering(null, 0),
+        () -> Accumulators.filteringToStr(null, 0),
+        () -> Accumulators.mapping(null, 0),
+        () -> Accumulators.mappingToStr(null, 0),
+        () -> Accumulators.aFlatMapping(null, 0),
+        () -> Accumulators.aFlatMappingToStr(null, 0));
     }
 }

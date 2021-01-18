@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static java.lang.String.join;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.copyOfRange;
 import static java.util.Collections.nCopies;
@@ -21,11 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.junit.platform.commons.util.ReflectionUtils.getDeclaredConstructor;
 import static org.springframework.util.ClassUtils.resolveClassName;
-import static ru.serge2nd.stream.util.Collecting.collect;
 import static ru.serge2nd.type.Types.NO_TYPES;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class TypeWrapTest {
+
+    //region Factory methods tests
+
     static List<Arguments> typesProvider() { return asList(
         //        Raw type     Type args                                  Owner            Expected wrapped type
         arguments(Map.class  , null                                     , null           , wrap(Map.class)),
@@ -36,6 +39,10 @@ class TypeWrapTest {
     @ParameterizedTest @MethodSource("typesProvider")
     <T> void testOf(Class<T> raw, Type[] typeArgs, Type owner, TypeWrap<T> expected) {
         assertEquals(expected, TypeWrap.of(raw, typeArgs, owner));
+    }
+    @ParameterizedTest @MethodSource("typesProvider")
+    <T> void testTypeOf(Class<T> raw, Type[] typeArgs, Type owner, TypeWrap<T> expected) {
+        assertEquals(expected, TypeWrap.type(raw, typeArgs, owner));
     }
 
     static List<Arguments> arrayTypesProvider() { return asList(
@@ -49,6 +56,13 @@ class TypeWrapTest {
     <T> void testOfArray(Class<T> raw, int dims, Type[] typeArgs, Type owner, TypeWrap<T> expected) {
         assertEquals(expected, TypeWrap.of(raw, dims, typeArgs, owner));
     }
+    @ParameterizedTest @MethodSource("arrayTypesProvider")
+    <T> void testTypeOfArray(Class<T> raw, int dims, Type[] typeArgs, Type owner, TypeWrap<T> expected) {
+        assertEquals(expected, TypeWrap.type(raw, dims, typeArgs, owner));
+    }
+    //endregion
+
+    //region Instance tests
 
     @Test void testIsRaw()          { assertTrue(wrap(Map.class).isRaw()); }
     @Test void testNotRaw()         { assertFalse(wrap(Map.class, (Type)null).isRaw()); }
@@ -73,14 +87,16 @@ class TypeWrapTest {
     void testEqualToOtherType() { assertFalse(wrap(Map.class).equals(Map.class));}
     @Test @SuppressWarnings("SimplifiableAssertion")
     void testEqualToOther()     { assertFalse(wrap(Map.class).equals(wrap(AbstractMap.class)));}
+    //endregion
+
+    //region Instantiating for tests
 
     static <T> TypeWrap<T> wrap(Class<?> raw, Type... types) {
         return wrap(parameterizedTestType(raw, types));
     }
     static <T> TypeWrap<T> wrap(Class<?> raw, int dims, Type... types) {
         if (types.length < 2) {
-            return wrap(resolveClassName(collect(nCopies(dims, "[]"),
-                    new StringBuilder(raw.getName()), StringBuilder::append).toString(), null));
+            return wrap(resolveClassName(raw.getName() + join("", nCopies(dims, "[]")), null));
         }
         Type t = parameterizedTestType(raw, types);
         while (dims-- > 0) t = arrayTestType(t);
@@ -90,6 +106,11 @@ class TypeWrapTest {
     static <T> TypeWrap<T> wrap(Type t) {
         return ReflectionUtils.newInstance(getDeclaredConstructor(TypeWrap.class), t);
     }
+    static Type[] types(Type... types) { return types; }
+    //endregion
+
+    //region Test types
+
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     static ParameterizedType parameterizedTestType(Class<?> raw, Type... types) { return new ParameterizedType() {
         public Type   getRawType()             { return raw; }
@@ -111,5 +132,5 @@ class TypeWrapTest {
             return !(other instanceof TypeWrap) && component.equals(other.getGenericComponentType());
         }
     };}
-    static Type[] types(Type... types) { return types; }
+    //endregion
 }

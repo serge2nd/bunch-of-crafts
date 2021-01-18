@@ -8,6 +8,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.serge2nd.NoInstanceTest;
 import ru.serge2nd.collection.Unmodifiable;
+import ru.serge2nd.misc.BitsResolver;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -53,7 +54,7 @@ class FilteringCollectorsTest implements NoInstanceTest<FilteringCollectors> {
                           BiFunction<Predicate<?>, Integer, Collector<LocalDate, ?, Collection<?>>> collector,
                           int opts, Class<?> expectedCls) {
         Collection<LocalDate> src = supplier.get(); src.addAll(asList(null, NOW, NOW.withYear(0)));
-        Collection<?> expected = (Collection)(has(NON_NULL, opts)
+        Collection<?> expected = (Collection)(BitsResolver.has(NON_NULL, opts)
                 ? src.stream().filter(Objects::nonNull).filter(NON_ZERO_YEAR).collect(toCollection(supplier))
                 : src.stream().filter(NON_ZERO_YEAR).collect(toCollection(supplier)));
 

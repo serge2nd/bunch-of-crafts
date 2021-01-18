@@ -11,8 +11,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 import static java.lang.invoke.MethodHandles.lookup;
-import static ru.serge2nd.stream.util.Accumulators.filteringAccumulator;
-import static ru.serge2nd.stream.util.Accumulators.filteringToStrAccumulator;
+import static ru.serge2nd.stream.util.Accumulators.filtering;
+import static ru.serge2nd.stream.util.Accumulators.filteringToStr;
 import static ru.serge2nd.stream.MappingCollectors.forList;
 import static ru.serge2nd.stream.MappingCollectors.forSet;
 import static ru.serge2nd.ObjectAssist.errNotInstantiable;
@@ -28,13 +28,13 @@ public class FilteringCollectors {
     //region Factory methods
 
     public static <E> Collector<E, ?, String> filterToStr(Predicate<E> filter, Supplier<StringJoiner> supplier, int opts) {
-        return new ToString<>(supplier, filteringToStrAccumulator(filter, opts));
+        return new ToString<>(supplier, filteringToStr(filter, opts));
     }
     public static <E> Collector<E, ?, Set<E>> filterToSet(Predicate<E> filter, int opts)  {
-        return forSet(filteringAccumulator(filter, opts), opts);
+        return forSet(filtering(filter, opts), opts);
     }
     public static <E> Collector<E, ?, List<E>> filterToList(Predicate<E> filter, int opts) {
-        return forList(filteringAccumulator(filter, opts), opts);
+        return forList(filtering(filter, opts), opts);
     }
     //endregion
 }

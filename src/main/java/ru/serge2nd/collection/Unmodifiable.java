@@ -20,7 +20,7 @@ import static java.util.Collections.unmodifiableCollection;
  * Also contains factory methods to create unmodifiable collections.
  */
 @SuppressWarnings("EqualsWhichDoesntCheckParameterClass,RedundantUnmodifiable")
-public abstract class Unmodifiable<E> implements Collection<E>, NotList<E> {
+public abstract class Unmodifiable<E> implements NotCollection<E>, NotList<E> {
 
     //region Factory methods
 

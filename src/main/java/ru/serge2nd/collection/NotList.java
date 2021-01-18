@@ -16,7 +16,7 @@ import java.util.function.UnaryOperator;
  * @see List
  */
 @Overrides(List.class)
-interface NotList<E> {
+public interface NotList<E> {
     @Overrides E       set(int index, E element);
     @Overrides void    add(int index, E element);
     @Overrides boolean addAll(int index, Collection<? extends E> c);

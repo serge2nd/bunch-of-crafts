@@ -23,10 +23,10 @@ public class DelegatingOperatorProvider<T> implements OperatorProvider<T> {
 
     //region The state & constructors
 
-    /** Delegates map */
+    /** The delegates map */
     private final Map<TypeWrap<? extends T>, OperatorProvider<? extends T>> delegates = new HashMap<>();
 
-    /** Ordered supported types (delegate keys) */
+    /** The ordered supported types (delegate keys) */
     private final Deque<TypeWrap<? extends T>> orderedTypes = new LinkedList<>();
 
     /** To choose right delegate by type */
@@ -39,9 +39,9 @@ public class DelegatingOperatorProvider<T> implements OperatorProvider<T> {
 
     /**
      * Gets the operator from the first delegate that matches by the specified delegate matcher and returns non-empty operator.
-     * If no such delegate exists, the {@link Optional#empty()} is returned.
-     * @param type type
-     * @return the operator from the appropriate delegate or the {@link Optional#empty()}
+     * If no such delegate exists, {@link Optional#empty()} is returned.
+     * @param type the type
+     * @return the operator from the appropriate delegate or {@link Optional#empty()}
      * @see OperatorProvider#forType(Type)
      */
     @Override

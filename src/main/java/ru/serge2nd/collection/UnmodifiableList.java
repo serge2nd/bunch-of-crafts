@@ -32,19 +32,18 @@ public abstract class UnmodifiableList<E> extends UnmodifiableCollection<E> impl
     }
 
     @Override
-    public final ListIterator<E> listIterator()          { return listIterator(0); }
+    public final ListIterator<E> listIterator()      { return listIterator(0); }
     @Override
-    public final ListIterator<E> listIterator(int index) { return new ListIterator<E>() {
-        final ListIterator<E> it       = list().listIterator(index);
-        public boolean hasNext()       { return it.hasNext(); }
-        public E       next()          { return it.next(); }
-        public boolean hasPrevious()   { return it.hasPrevious(); }
-        public E       previous()      { return it.previous(); }
-        public int     nextIndex()     { return it.nextIndex(); }
-        public int     previousIndex() { return it.previousIndex(); }
-        public void    forEachRemaining(Consumer<? super E> action) { it.forEachRemaining(action); }
-        public void    remove()        { throw errNotModifiable(); }
+    public final ListIterator<E> listIterator(int i) { return new ListItr<>(list().listIterator(i)); }
+
+    static class ListItr<E> extends Itr<E> implements ListIterator<E> {
+        ListItr(ListIterator<E> it)    { super(it); }
+        public boolean hasPrevious()   { return it().hasPrevious(); }
+        public E       previous()      { return it().previous(); }
+        public int     nextIndex()     { return it().nextIndex(); }
+        public int     previousIndex() { return it().previousIndex(); }
         public void    set(E e)        { throw errNotModifiable(); }
         public void    add(E e)        { throw errNotModifiable(); }
-    }; }
+        ListIterator<E> it() { return (ListIterator<E>)it; }
+    }
 }

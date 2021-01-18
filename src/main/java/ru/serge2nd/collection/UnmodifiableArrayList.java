@@ -58,10 +58,10 @@ public abstract class UnmodifiableArrayList<E> extends UnmodifiableArrayCollecti
     public final ListIterator<E> listIterator(int i) { return new ListItr<>(array, checkClosedRange(i)); }
 
     int checkRange(int i)       { if (0 > i || i >= array.length) throw errOutOfBounds(i, array.length); return i; }
-    int checkClosedRange(int i) { if (0 > i || i > array.length) throw errOutOfBounds(i, array.length); return i; }
+    int checkClosedRange(int i) { if (0 > i || i > array.length) throw errOutOfBounds(i, array.length, true); return i; }
 
     static class ListItr<E> extends Itr<E> implements ListIterator<E> {
-        ListItr(E[] array, int i)      { super(array); this.i = i; }
+        ListItr(E[] array, int i)      { super(array, i); }
         public boolean hasPrevious()   { return i > 0; }
         public E       previous()      { if (i > 0) return array[--i]; throw errOutOfBounds(i - 1, array.length); }
         public int     nextIndex()     { return i; }

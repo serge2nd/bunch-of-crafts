@@ -1,5 +1,6 @@
 package ru.serge2nd.collection;
 
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +24,7 @@ import java.util.stream.StreamSupport;
  * @see Unmodifiable
  */
 @RequiredArgsConstructor
-public abstract class UnmodifiableArrayCollection<E> extends Unmodifiable<E> {
+public abstract class UnmodifiableArrayCollection<E> extends Unmodifiable<E> implements Collection<E> {
     protected final E[] array;
 
     //region Size & conversions
@@ -64,15 +65,20 @@ public abstract class UnmodifiableArrayCollection<E> extends Unmodifiable<E> {
     public final Iterator<E>    iterator()                                   { return new Itr<>(array); }
 
     static NoSuchElementException errOutOfBounds(int i, int len) {
-        return new NoSuchElementException("index " + i + " not in [0; " + len + ")");
+        return errOutOfBounds(i, len, false);
+    }
+    static NoSuchElementException errOutOfBounds(int i, int len, boolean closed) {
+        return new NoSuchElementException("index " + i + " not in [0; " + len + (closed ? "]" : ")"));
     }
     //endregion
 
     @RequiredArgsConstructor
+    @AllArgsConstructor
     static class Itr<E> implements Iterator<E> {
         final E[] array; int i = 0;
         public boolean hasNext() { return i < array.length; }
         public E       next()    { if (i < array.length) return array[i++]; throw errOutOfBounds(i, array.length); }
+        public void    forEachRemaining(Consumer<? super E> action) { for (; i < array.length; i++) action.accept(array[i]); }
         public void    remove()  { throw errNotModifiable(); }
     }
 }

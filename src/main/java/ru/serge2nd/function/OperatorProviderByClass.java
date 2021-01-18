@@ -11,16 +11,15 @@ public interface OperatorProviderByClass<T> extends OperatorProvider<T> {
 
     /**
      * The result is the unary operator for the given class.
-     * @param clazz class
-     * @return the unary operator for the given class
+     * @param clazz the class
+     * @return the unary operator for the given class or {@link Optional#empty()} if that class not supported
      */
     Optional<UnaryOperator<T>> forType(Class<T> clazz);
 
     /**
-     * This default implementation calls the {@link #forType(Class)}
+     * {@inheritDoc}<br>
+     * This default implementation calls {@link #forType(Class)}
      * with the raw class extracted from the given type.
-     * @param type type
-     * @return the unary operator for the raw class
      */
     @Override
     @SuppressWarnings("unchecked")
