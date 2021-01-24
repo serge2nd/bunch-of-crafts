@@ -18,23 +18,24 @@ import static java.lang.reflect.Array.getLength;
 import static java.lang.reflect.Array.newInstance;
 import static java.util.Collections.singleton;
 import static org.springframework.util.ObjectUtils.isArray;
+import static org.springframework.util.StringUtils.hasText;
 
 public class ObjectAssist {
     private ObjectAssist() { throw errNotInstantiable(lookup()); }
 
-    private static final String P_NULL_REF_ERROR_TYPE = "nullRefErrorType";
-    private static final MethodHandle NULL_REF_ERROR_CONSTRUCTOR;
+    public static final String               P_NULL_REF_ERROR_TYPE       = "nullRefErrorType";
+    public static Class<? extends Throwable> DEFAULT_NULL_REF_ERROR_TYPE = IllegalArgumentException.class;
 
-    static { try {
+    private static final MethodHandle NULL_REF_ERROR_CONSTRUCTOR = nullRefErrorConstructor();
+    @SneakyThrows
+    private static MethodHandle nullRefErrorConstructor() {
         String errorTypeName = System.getProperty(P_NULL_REF_ERROR_TYPE);
-        Class<?> errorType = errorTypeName != null
+        Class<?> errorType = hasText(errorTypeName)
                 ? Class.forName(errorTypeName)
                 : IllegalArgumentException.class;
         if (!Throwable.class.isAssignableFrom(errorType)) throw new IllegalArgumentException("not throwable: " + errorType.getName());
-        NULL_REF_ERROR_CONSTRUCTOR = lookup().findConstructor(errorType, methodType(void.class, String.class));
-    } catch (Exception e) {
-        throw new IllegalStateException(ObjectAssist.class.getName() + " initialization failed", e);
-    }}
+        return lookup().findConstructor(errorType, methodType(void.class, String.class));
+    }
 
     @NonNull
     public static <V> V nullSafe(@Nullable V v, String msg) {

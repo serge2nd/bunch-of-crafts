@@ -256,21 +256,15 @@ public class HardPropertiesTest {
         () -> HardProperties.of(null));
     }
 
-    static Consumer<HardProperties> c(Consumer<HardProperties> c) { return c; }
-    @SuppressWarnings("rawtypes")
-    static Consumer<Map>            a(Consumer<Map> f)            { return f; }
-    @SuppressWarnings("rawtypes")
-    static <R> Function<Map, R>     f(Function<Map, R> f)         { return f; }
-
-    @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
+    @SuppressWarnings("unchecked,rawtypes,EqualsWhichDoesntCheckParameterClass")
     static void withCalled(TriConsumer<Map<Object, Object>, HardProperties, Map<String, Integer>> test) {
         Map<String, Integer> called = new HashMap<>();
         class Called {Called(String name) { called.merge(name, 1, Math::addExact); }}
 
         Map<Object, Object> map = new Map<Object, Object>() {
-            public String  toString()         { new Called("toString"); return K; }
-            public int     hashCode()         { new Called("hashCode"); return V; }
             public boolean equals(Object obj) { if (!K.equals(obj)) fail(); new Called("equals"); return true; }
+            public int     hashCode()         { new Called("hashCode"); return V; }
+            public String  toString()         { new Called("toString"); return K; }
             public int     size()             { new Called("size"); return V; }
             public boolean isEmpty()          { new Called("isEmpty"); return true; }
 
@@ -279,13 +273,12 @@ public class HardPropertiesTest {
             public Object  get(Object key)                               { if (!K.equals(key)) fail(); new Called("get"); return V; }
             public Object  getOrDefault(Object key, Object defaultValue) { if (!K.equals(key)) fail(); new Called("getOrDefault"); return defaultValue; }
 
-            public Set<Object>                keySet()   { new Called("keySet"); return singleton(K); }
-            @SuppressWarnings("unchecked,rawtypes")
-            public Collection<Object>         values()   { new Called("values"); return new ArrayList(singletonList(V)) {
+            public Set<Object>        keySet() { new Called("keySet"); return singleton(K); }
+            public Collection<Object> values() { new Called("values"); return new ArrayList() {{add(V);}
                 public boolean equals(Object o) { return super.equals(new ArrayList((Collection)o)); }
             }; }
-            public Set<Entry<Object, Object>> entrySet() { new Called("entrySet"); return singleton(new SimpleEntry<>(K, V)); }
 
+            public Set<Entry<Object, Object>> entrySet() { new Called("entrySet"); return singleton(new SimpleEntry<>(K, V)); }
             public void forEach(BiConsumer<? super Object, ? super Object> action) { if (action != A) fail(); new Called("forEach"); }
 
             public Object  put(Object key, Object value)    { new Called("put"); return null; }
@@ -326,6 +319,12 @@ public class HardPropertiesTest {
         @Override
         public void describeMismatch(Object $, Description description) { description.appendText("was ").appendValue(called); }
     };}
+
+    static Consumer<HardProperties> c(Consumer<HardProperties> c) { return c; }
+    @SuppressWarnings("rawtypes")
+    static Consumer<Map>            a(Consumer<Map> f)            { return f; }
+    @SuppressWarnings("rawtypes")
+    static <R> Function<Map, R>     f(Function<Map, R> f)         { return f; }
 
     interface TriConsumer<S, T, U> { void accept(S s, T t, U u); }
 }
