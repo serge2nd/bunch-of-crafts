@@ -1,6 +1,6 @@
 package ru.serge2nd.collection;
 
-import ru.serge2nd.type.Overrides;
+import ru.serge2nd.type.Over;
 
 import java.util.Collection;
 import java.util.function.Predicate;
@@ -8,13 +8,13 @@ import java.util.function.Predicate;
 /**
  * @see NotList
  */
-@Overrides(Collection.class)
+@Over(Collection.class)
 public interface NotCollection<E> {
-    @Overrides boolean add(E e);
-    @Overrides boolean addAll(Collection<? extends E> coll);
-    @Overrides boolean remove(Object o);
-    @Overrides boolean removeIf(Predicate<? super E> filter);
-    @Overrides boolean removeAll(Collection<?> coll);
-    @Overrides boolean retainAll(Collection<?> coll);
-    @Overrides void    clear();
+    @Over boolean add(E e);
+    @Over boolean addAll(Collection<? extends E> coll);
+    @Over boolean remove(Object o);
+    @Over boolean removeIf(Predicate<? super E> filter);
+    @Over boolean removeAll(Collection<?> coll);
+    @Over boolean retainAll(Collection<?> coll);
+    @Over void    clear();
 }

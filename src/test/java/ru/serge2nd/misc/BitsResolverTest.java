@@ -7,7 +7,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static ru.serge2nd.test.Asserting.assertEach;
-import static ru.serge2nd.test.match.ArrayMatch.isArray;
+import static ru.serge2nd.test.match.ArrayMatch.items;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
 import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
 
@@ -16,8 +16,8 @@ class BitsResolverTest {
 
     @Test @SuppressWarnings("ConstantConditions")
     void testNewBitsResolver() { assertThat(
-        getField(new BitsResolver<>(3, "x"), "vals")     , isArray("x"),
-        getField(new BitsResolver<>(0, "x", "y"), "vals"), isArray("x"),
+        getField(new BitsResolver<>(3, "x"), "vals")     , items("x"),
+        getField(new BitsResolver<>(0, "x", "y"), "vals"), items("x"),
         ()->new BitsResolver<>(0, (Object[])null)        , illegalArgument());
     }
 

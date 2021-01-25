@@ -15,6 +15,4 @@ public interface BeanDefinitionFactory {
      * @return created bean definition
      */
     BeanDefinition from(BeanCfg beanCfg);
-
-
 }

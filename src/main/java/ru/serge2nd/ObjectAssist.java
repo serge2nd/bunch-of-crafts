@@ -39,24 +39,24 @@ public class ObjectAssist {
 
     @NonNull
     public static <V> V nullSafe(@Nullable V v, String msg) {
-        if (v == null) throwNullRefError(msg);
+        if (v == null) { throwSneaky(nullRefError(msg)); return ignored(); }
         return v;
     }
     @NonNull
     public static <V> V nullSafe(@Nullable V v, String msg, Function<String, ? extends Throwable> err) {
-        if (v == null) throwSneaky(err.apply(msg));
+        if (v == null) { throwSneaky(err.apply(msg)); return ignored(); }
         return v;
     }
     @NonNull
     public static <V> V nullSafe(@Nullable V v, Supplier<? extends Throwable> err) {
-        if (v == null) throwSneaky(err.get());
+        if (v == null) { throwSneaky(err.get()); return ignored(); }
         return v;
     }
-    @SneakyThrows
-    static void throwNullRefError(String msg) { throw (Throwable)NULL_REF_ERROR_CONSTRUCTOR.invoke(msg); }
 
     @SuppressWarnings("unchecked")
     public static <T extends Throwable> void throwSneaky(Throwable t) throws T { throw (T)t; }
+    @SneakyThrows
+    public static Throwable nullRefError(String msg) { return (Throwable)NULL_REF_ERROR_CONSTRUCTOR.invoke(msg); }
 
     /**
      * Flattens the specified array into one-dimensional array with the same component type.
@@ -172,4 +172,8 @@ public class ObjectAssist {
     public static UnsupportedOperationException errNotInstantiable(Class<?> cls) {
         return new UnsupportedOperationException("non-instantiable: " + cls);
     }
+
+    @SuppressWarnings("unchecked")
+    private static <V> V ignored() { return (V)IGNORED; }
+    private static final Object IGNORED = new Object();
 }

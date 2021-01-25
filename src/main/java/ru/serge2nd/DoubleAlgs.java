@@ -1,8 +1,11 @@
 package ru.serge2nd;
 
 import static java.lang.Math.abs;
+import static java.lang.invoke.MethodHandles.lookup;
+import static ru.serge2nd.ObjectAssist.errNotInstantiable;
 
 public class DoubleAlgs {
+    private DoubleAlgs() { throw errNotInstantiable(lookup()); }
 
     /**
      * Just increments {@code sum[0]} by {@code x}.

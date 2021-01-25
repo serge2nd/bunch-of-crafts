@@ -22,11 +22,11 @@ class ArrayCollectorsTest implements NoInstanceTest<ArrayCollectors> {
 
     @Test void testMapToArray() { assertThat(collect(
         mapToArray(Object::toString, ()->new String[2]), 5, 7),
-        isArray("5", "7"));
+        items("5", "7"));
     }
     @Test void testMapToTruncArray() { assertThat(collect(
         mapToArray(Object::toString, ()->new String[2]), 5, 7, 9),
-        isArray("5", "7"));
+        items("5", "7"));
     }
 
     @Test void testMapToNoBools() {

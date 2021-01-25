@@ -23,12 +23,12 @@ public class WrapBeanPostProcessor implements BeanPostProcessor {
     public static final BeanFilter ALL_BEANS = (type, bean) -> true;
     public static final BeanNameFilter ALL_NAMES = name -> true;
 
-    private final Wrapper wrapper;
+    private final BiFunction<Type, Object, ?> wrapper;
     private final BeanFilter beanFilter;
     private final BeanNameFilter beanNameFilter;
     private final ConfigurableListableBeanFactory ctx;
 
-    public WrapBeanPostProcessor(@NonNull Wrapper wrapper,
+    public WrapBeanPostProcessor(@NonNull BiFunction<Type, Object, ?> wrapper,
                                  @Nullable BeanFilter beanFilter,
                                  @Nullable BeanNameFilter beanNameFilter,
                                  @NonNull ConfigurableListableBeanFactory ctx) {
@@ -51,9 +51,6 @@ public class WrapBeanPostProcessor implements BeanPostProcessor {
         return wrapper.apply(resolvable != NONE ? resolvable.getType() : null, bean);
     }
 
-    @FunctionalInterface
-    public interface Wrapper extends BiFunction<Type, Object, Object> {
-    }
     @FunctionalInterface
     public interface BeanFilter extends BiPredicate<BeanDefinition, Object> {
     }

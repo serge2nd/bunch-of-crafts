@@ -10,6 +10,7 @@ import java.lang.invoke.MethodHandle;
 import java.util.Random;
 
 import static java.lang.Double.parseDouble;
+import static java.lang.Double.toHexString;
 import static java.lang.Float.parseFloat;
 import static java.lang.invoke.MethodHandles.lookup;
 import static java.lang.invoke.MethodType.methodType;
@@ -19,10 +20,11 @@ import static org.objectweb.asm.ClassReader.*;
 import static org.objectweb.asm.ClassWriter.COMPUTE_FRAMES;
 import static org.objectweb.asm.Opcodes.*;
 import static ru.serge2nd.test.Asserting.assertEach;
-import static ru.serge2nd.type.Classes.descriptor;
+import static ru.serge2nd.test.match.AssertAllMatch.assertAllMatch;
+import static ru.serge2nd.test.match.CommonMatch.equalTo;
 
 @TestInstance(Lifecycle.PER_CLASS)
-class DoubleAlgsTest {
+class DoubleAlgsTest implements NoInstanceTest<DoubleAlgs> {
     static final Class<?> ORIG = DoubleAlgs.class;
     static final Class<?> CLS = fitClassForTest();
     @SneakyThrows
@@ -63,12 +65,11 @@ class DoubleAlgsTest {
         double exact2 = valueOf(itKB3Sum[0]).add(valueOf(itKB3Sum[1])).add(valueOf(itKB3Sum[2])).add(valueOf(itKB3Sum[3])).doubleValue();
 
         assertEach(() ->
-        assertEquals(parseFloat ("0x1.0p24")           , plainSum[0]), () ->
-        assertEquals(parseFloat ("0x1.7d77f6p24")      , kahanSum[0] + kahanSum[1]), () ->
-        assertEquals(parseFloat ("0x1.7d7852p24")      , neumaSum[0] + neumaSum[1]), () ->
-        assertEquals(parseDouble("0x1.7d77f52cep24")   , (double)kleinSum[0] + kleinSum[1] + kleinSum[2]), () ->
-        assertEquals(parseDouble("0x1.7d77f52be48fp24"), exact1), () ->
-        assertEquals(exact1, exact2));
+        assertEquals(parseFloat ("0x1.0p24")         , plainSum[0]), () ->
+        assertEquals(parseFloat ("0x1.7d77f6p24")    , kahanSum[0] + kahanSum[1]), () ->
+        assertEquals(parseFloat ("0x1.7d7852p24")    , neumaSum[0] + neumaSum[1]), () ->
+        assertEquals(parseDouble("0x1.7d77f52cep24") , (double)kleinSum[0] + kleinSum[1] + kleinSum[2]), () ->
+        assertAllMatch(equalTo("0x1.7d77f52be48fp24"), toHexString(exact1), toHexString(exact2)));
     }
 
     static class ClassVisitor extends org.objectweb.asm.ClassVisitor {
@@ -117,5 +118,5 @@ class DoubleAlgsTest {
         op == DCMPL   ? FCMPL :
         op == DRETURN ? FRETURN : op;
     }
-    static String d2f(String descriptor) { return descriptor.replace(descriptor(double.class), descriptor(float.class)); }
+    static String d2f(String descriptor) { return descriptor.replace('D', 'F'); }
 }

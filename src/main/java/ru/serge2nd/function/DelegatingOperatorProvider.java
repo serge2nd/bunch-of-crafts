@@ -23,13 +23,13 @@ public class DelegatingOperatorProvider<T> implements OperatorProvider<T> {
 
     //region The state & constructors
 
-    /** The delegates map */
+    /** The delegates map. */
     private final Map<TypeWrap<? extends T>, OperatorProvider<? extends T>> delegates = new HashMap<>();
 
-    /** The ordered supported types (delegate keys) */
+    /** The ordered supported types (delegate keys). */
     private final Deque<TypeWrap<? extends T>> orderedTypes = new LinkedList<>();
 
-    /** To choose right delegate by type */
+    /** To choose right delegate by type. */
     private final DelegateMatcher<T> delegateMatcher;
 
     @SuppressWarnings("unchecked")

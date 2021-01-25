@@ -6,7 +6,7 @@ import java.util.function.UnaryOperator;
 
 /**
  * A provider of an unary operator to apply to objects of the particular type.
- * @param <T> type which this operator provider accepts
+ * @param <T> the type which this operator provider accepts
  */
 public interface OperatorProvider<T> {
 

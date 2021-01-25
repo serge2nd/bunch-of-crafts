@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 import static java.lang.Character.toLowerCase;
 
 /**
- * Simple immutable configuration of (<i>typically Spring</i>) container-managed bean.
+ * A simple immutable configuration of (<i>typically Spring</i>) container-managed bean.
  * Easy to create via {@link BeanCfgBuilder}.
  */
 @Value

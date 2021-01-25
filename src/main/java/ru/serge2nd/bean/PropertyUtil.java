@@ -19,12 +19,24 @@ import static ru.serge2nd.ObjectAssist.errNotInstantiable;
 public class PropertyUtil {
     private PropertyUtil() { throw errNotInstantiable(lookup()); }
 
+    /** Equivalent of {@link #propertyOrigin(Function, NameTransformer, String...) propertyOrigin(propertyGetter, TO_NAME, prefixes)}. */
     public static <V> PropertyOrigin<V> propertyOrigin(Function<String, V> propertyGetter, String... prefixes) {
-        return propertyOrigin(propertyGetter, NAME, prefixes);
+        return propertyOrigin(propertyGetter, TO_NAME, prefixes);
     }
+    /** Equivalent of {@link #propertyOrigin(Function, NameTransformer, String...) propertyOrigin(propertyGetter, TO_SUFFIX, prefixes)}. */
     public static <V> PropertyOrigin<V> propertySuffixOrigin(Function<String, V> propertyGetter, String... prefixes) {
-        return propertyOrigin(propertyGetter, SUFFIX, prefixes);
+        return propertyOrigin(propertyGetter, TO_SUFFIX, prefixes);
     }
+
+    /**
+     * Provides a {@link PropertyOrigin PropertyOrigin} to fetch property maps with keys
+     * presenting property names transformed by the given {@link NameTransformer NameTransformer}.
+     * @param propertyGetter gets the property value by name
+     * @param transformer the property name transformer
+     * @param prefixes the prefixes to select properties by
+     * @param <V> the general type of the property values
+     * @return the {@link PropertyOrigin PropertyOrigin} grabbing the properties by the specified prefixes
+     */
     public static <V> PropertyOrigin<V> propertyOrigin(@NonNull Function<String, V> propertyGetter,
                                                        @NonNull NameTransformer transformer,
                                                        @NonNull String... prefixes) {
@@ -34,6 +46,12 @@ public class PropertyUtil {
                 NON_NULL | UNMODIFIABLE));
     }
 
+    /**
+     * Returns the first prefix among the passed the name starts with.
+     * @param name the name
+     * @param prefixes the prefixes
+     * @return the first prefix the name starts with or <code>null</code> if no such
+     */
     public static String findPrefix(String name, String... prefixes) {
         if (name == null || prefixes == null) return null;
         for (String prefix : prefixes)
@@ -53,6 +71,6 @@ public class PropertyUtil {
         default String apply(String name, String prefix) { return applyTo(name, prefix); }
     }
 
-    private static final NameTransformer NAME   = (name, prefix) -> prefix != null ? name : null;
-    private static final NameTransformer SUFFIX = (name, prefix) -> prefix != null && name != null ? name.substring(prefix.length()) : null;
+    public static final NameTransformer TO_NAME   = (name, prefix) -> prefix != null ? name : null;
+    public static final NameTransformer TO_SUFFIX = (name, prefix) -> prefix != null && name != null ? name.substring(prefix.length()) : null;
 }

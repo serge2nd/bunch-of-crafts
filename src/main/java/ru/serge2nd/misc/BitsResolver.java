@@ -7,6 +7,29 @@ import static java.lang.Integer.bitCount;
 import static java.lang.Integer.numberOfTrailingZeros;
 import static java.util.Arrays.copyOf;
 
+/**
+ * Example:
+ * <pre>
+ *     int $1ST = 1 << 5;
+ *     int $2ND = 1 << 10;
+ *     int $3RD = 1 << 20;
+ *     int ALL = $1ST | $2ND | $3RD;
+ *
+ *     BitsResolver<String> r = new BitsResolver<>(ALL,
+ *             "xxx", "xxv", "xvx", "xvv",
+ *             "vxx", "vxv", "vvx");
+ *
+ *     assert "xxx".equals(r.resolve(0));
+ *     assert "xxv".equals(r.resolve($1ST));
+ *     assert "xvx".equals(r.resolve($2ND));
+ *     assert "xvv".equals(r.resolve($1ST | $2ND));
+ *
+ *     assert "vxx".equals(r.resolve($3RD));
+ *     assert "vxv".equals(r.resolve($1ST | $3RD));
+ *     assert "vvx".equals(r.resolve($2ND | $3RD));
+ *     assert null == r.resolve($1ST |$2ND | $3RD);
+ * </pre>
+ */
 public final class BitsResolver<T> {
     private static final int H = SIZE - 1;
     private final int all;

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostP
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import ru.serge2nd.bean.processor.WrapBeanPostProcessor.Wrapper;
 import ru.serge2nd.collection.HardProperties;
 import ru.serge2nd.bean.BeanCfg;
 import ru.serge2nd.bean.definition.DefaultBeanDefinitionFactory;
@@ -16,7 +15,9 @@ import ru.serge2nd.function.DelegatingOperatorProvider;
 import ru.serge2nd.function.OperatorProvider;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.*;
+import java.util.function.BiFunction;
 
 import static java.util.Collections.*;
 import static java.util.Optional.ofNullable;
@@ -159,7 +160,7 @@ class WrapBeanPostProcessorTest {
         addDelegate(List.class,         $ -> Optional.of(Collections::<Object>unmodifiableList));
         addDelegate(Collection.class,   $ -> Optional.of(Collections::<Object>unmodifiableCollection));
     }};
-    static final Wrapper WRAPPER = (type, bean) -> ofNullable(type)
+    static final BiFunction<Type, Object, ?> WRAPPER = (type, bean) -> ofNullable(type)
             .flatMap(IMMUTABLES::forType)
             .map(w -> w.apply(bean))
             .orElse(bean);

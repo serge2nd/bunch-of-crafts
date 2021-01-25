@@ -6,7 +6,15 @@ import static java.lang.Double.isInfinite;
 import static java.lang.Double.isNaN;
 import static java.math.BigDecimal.valueOf;
 
+/**
+ * Accumulating a sum of <code>double</code> values with compensation.
+ * See {@link DoubleAlgs#kahanSum(double[], double)} and {@link DoubleAlgs#iterativeKBSum(double[], double, int)}
+ * for examples of compensating summation.
+ */
 public class DoubleSum {
+    @FunctionalInterface
+    public interface CompensatingSumOp { double[] add(double[] sum, double x); }
+
     private final CompensatingSumOp op;
     private final double[] sum;
 
@@ -31,21 +39,23 @@ public class DoubleSum {
     public DoubleSum add(double x) {
         op.add(sum, x); return this;
     }
+    /** Get the raw result (perhaps with very basic compensation). */
+    public double raw() {
+        return sum[0];
+    }
+    /** Get the fast but not too precise result. */
     public double get() {
         double s = sum[0];
         for(int i = 1; i < sum.length; i++) s += sum[i];
         return fin(s);
     }
+    /** Get the more precise result slower with as many {@link BigDecimal} allocations as the value of the compensation order. */
     public double fine() {
         if (sum.length == 1) return sum[0];
         BigDecimal s = valueOf(sum[0]);
         for(int i = 1; i < sum.length; i++) s = s.add(valueOf(sum[i]));
         return fin(s.doubleValue());
     }
-    public double raw() { return sum[0]; }
 
-    double fin(double s) { return isNaN(s) && isInfinite(sum[0]) ? sum[0] : s; }
-
-    @FunctionalInterface
-    public interface CompensatingSumOp { double[] add(double[] sum, double x); }
+    private double fin(double s) { return isNaN(s) && isInfinite(sum[0]) ? sum[0] : s; }
 }
