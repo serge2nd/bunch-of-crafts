@@ -40,12 +40,12 @@ import static ru.serge2nd.stream.util.Collecting.collect;
 import static ru.serge2nd.ObjectAssist.flatArray;
 import static ru.serge2nd.test.match.AssertForMany.assertForMany;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.CommonMatch.equalTo;
-import static ru.serge2nd.test.match.CommonMatch.fails;
-import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
-import static ru.serge2nd.test.match.CommonMatch.sameAs;
-import static ru.serge2nd.test.match.CommonMatch.sameClass;
-import static ru.serge2nd.test.match.CommonMatch.unsupported;
+import static ru.serge2nd.test.match.CoreMatch.equalTo;
+import static ru.serge2nd.test.match.CoreMatch.fails;
+import static ru.serge2nd.test.match.CoreMatch.illegalArgument;
+import static ru.serge2nd.test.match.CoreMatch.sameAs;
+import static ru.serge2nd.test.match.CoreMatch.sameClass;
+import static ru.serge2nd.test.match.CoreMatch.unsupported;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @SuppressWarnings("RedundantUnmodifiable")

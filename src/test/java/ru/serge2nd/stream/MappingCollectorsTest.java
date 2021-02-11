@@ -29,7 +29,7 @@ import static ru.serge2nd.stream.MapCollectorsTest.*;
 import static ru.serge2nd.stream.util.Collecting.collect;
 import static ru.serge2nd.stream.util.CollectingOptions.*;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.CommonMatch.equalTo;
+import static ru.serge2nd.test.match.CoreMatch.equalTo;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class MappingCollectorsTest implements NoInstanceTest<MappingCollectors> {

@@ -17,7 +17,7 @@ import static ru.serge2nd.bean.PropertyUtil.propertySuffixOrigin;
 import static ru.serge2nd.collection.HardProperties.properties;
 import static ru.serge2nd.test.match.AssertAllMatch.assertAllMatch;
 import static ru.serge2nd.test.match.AssertForMany.assertForMany;
-import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.CoreMatch.illegalArgument;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class PropertyUtilTest implements NoInstanceTest<PropertyUtil> {

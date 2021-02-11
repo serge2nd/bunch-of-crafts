@@ -29,8 +29,8 @@ import static ru.serge2nd.bean.definition.BeanDefinitions.register;
 import static ru.serge2nd.bean.processor.WrapBeanPostProcessor.ALL_NAMES;
 import static ru.serge2nd.collection.HardPropertiesTest.UNMOD_MAP;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.CommonMatch.equalTo;
-import static ru.serge2nd.test.match.CommonMatch.sameClass;
+import static ru.serge2nd.test.match.CoreMatch.equalTo;
+import static ru.serge2nd.test.match.CoreMatch.sameClass;
 import static ru.serge2nd.type.TypeWrap.type;
 
 @TestInstance(Lifecycle.PER_CLASS)

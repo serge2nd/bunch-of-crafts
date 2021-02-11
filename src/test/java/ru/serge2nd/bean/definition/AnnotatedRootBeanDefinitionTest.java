@@ -20,7 +20,7 @@ import static org.springframework.beans.factory.support.BeanDefinitionBuilder.ro
 import static ru.serge2nd.bean.definition.BeanDefinitionsTest.SFM;
 import static ru.serge2nd.test.match.AssertAllMatch.assertAllMatch;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.CommonMatch.notNullValue;
+import static ru.serge2nd.test.match.CoreMatch.notNullRef;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class AnnotatedRootBeanDefinitionTest {
@@ -29,10 +29,10 @@ class AnnotatedRootBeanDefinitionTest {
     static List<Arguments> rootBeanDefinitionsProvider() { return asList(
         //        Title              Bean def   Factory method  Expected annotated root bean definition
         arguments("no metadata"    , untyped(), null          , aa(Assertions::assertNull)),
-        arguments("factory"        , untyped(), SFM           , aa(abd -> assertThat(abd.getFactoryMethodMetadata(), notNullValue("method metadata")))),
-        arguments("class"          , typed()  , null          , aa(abd -> assertThat(abd.getMetadata()             , notNullValue("metadata")))),
+        arguments("factory"        , untyped(), SFM           , aa(abd -> assertThat(abd.getFactoryMethodMetadata(), notNullRef("method metadata")))),
+        arguments("class"          , typed()  , null          , aa(abd -> assertThat(abd.getMetadata()             , notNullRef("metadata")))),
 
-        arguments("factory & class", typed()  , SFM           , aa(abd -> assertAllMatch(notNullValue("metadata"), abd.getFactoryMethodMetadata(), abd.getMetadata()))),
+        arguments("factory & class", typed()  , SFM           , aa(abd -> assertAllMatch(notNullRef("metadata"), abd.getFactoryMethodMetadata(), abd.getMetadata()))),
 
         arguments("abd"            , DUMMY_ABD, null          , aa(abd -> assertThat(abd.getBeanClass()            , sameInstance(DUMMY_ABD.getBeanClass()),
                                                                                      abd.getFactoryMethodMetadata(), nullValue(),

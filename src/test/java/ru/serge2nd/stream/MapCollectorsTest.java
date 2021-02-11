@@ -24,9 +24,9 @@ import static ru.serge2nd.collection.HardPropertiesTest.UNMOD_MAP;
 import static ru.serge2nd.stream.util.CollectingOptions.*;
 import static ru.serge2nd.stream.util.Collecting.collect;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.CommonMatch.equalTo;
-import static ru.serge2nd.test.match.CommonMatch.illegalState;
-import static ru.serge2nd.test.match.CommonMatch.sameClass;
+import static ru.serge2nd.test.match.CoreMatch.equalTo;
+import static ru.serge2nd.test.match.CoreMatch.illegalState;
+import static ru.serge2nd.test.match.CoreMatch.sameClass;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class MapCollectorsTest implements NoInstanceTest<MapCollectors> {

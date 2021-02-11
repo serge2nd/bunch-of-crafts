@@ -32,9 +32,9 @@ import static org.springframework.util.ReflectionUtils.findMethod;
 import static ru.serge2nd.test.Asserting.assertEach;
 import static ru.serge2nd.test.match.AssertForMany.assertForMany;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.CommonMatch.equalTo;
-import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
-import static ru.serge2nd.test.match.CommonMatch.sameClass;
+import static ru.serge2nd.test.match.CoreMatch.equalTo;
+import static ru.serge2nd.test.match.CoreMatch.illegalArgument;
+import static ru.serge2nd.test.match.CoreMatch.sameClass;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class UnmodifiableTest {

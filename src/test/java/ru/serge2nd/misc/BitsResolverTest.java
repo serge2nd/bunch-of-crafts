@@ -9,7 +9,7 @@ import static org.springframework.test.util.ReflectionTestUtils.getField;
 import static ru.serge2nd.test.Asserting.assertEach;
 import static ru.serge2nd.test.match.ArrayMatch.items;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.CoreMatch.illegalArgument;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class BitsResolverTest {

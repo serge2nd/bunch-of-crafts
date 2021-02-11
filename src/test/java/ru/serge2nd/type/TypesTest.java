@@ -28,7 +28,7 @@ import static org.springframework.data.util.ReflectionUtils.getMethod;
 import static ru.serge2nd.test.Asserting.assertEach;
 import static ru.serge2nd.test.match.AssertForMany.assertForMany;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.CoreMatch.illegalArgument;
 import static ru.serge2nd.type.Types.NO_TYPES;
 import static ru.serge2nd.collection.HardProperties.properties;
 

@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.springframework.data.util.ReflectionUtils.findRequiredMethod;
 import static ru.serge2nd.test.Asserting.assertEach;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.CoreMatch.illegalArgument;
 import static ru.serge2nd.type.TypesTest.CLS_LDR;
 
 @TestInstance(Lifecycle.PER_CLASS)

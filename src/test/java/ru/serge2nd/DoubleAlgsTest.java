@@ -21,7 +21,7 @@ import static org.objectweb.asm.ClassWriter.COMPUTE_FRAMES;
 import static org.objectweb.asm.Opcodes.*;
 import static ru.serge2nd.test.Asserting.assertEach;
 import static ru.serge2nd.test.match.AssertAllMatch.assertAllMatch;
-import static ru.serge2nd.test.match.CommonMatch.equalTo;
+import static ru.serge2nd.test.match.CoreMatch.equalTo;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class DoubleAlgsTest implements NoInstanceTest<DoubleAlgs> {

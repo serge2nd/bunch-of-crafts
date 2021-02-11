@@ -34,14 +34,14 @@ import static ru.serge2nd.stream.util.CharacteristicSet.maskOf;
 import static ru.serge2nd.test.Asserting.assertEach;
 import static ru.serge2nd.test.match.AssertForMany.assertForMany;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.SequentMatch.emits;
-import static ru.serge2nd.test.match.CommonMatch.equalTo;
-import static ru.serge2nd.test.match.SequentMatch.hasNext;
-import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
-import static ru.serge2nd.test.match.SequentMatch.noNext;
-import static ru.serge2nd.test.match.CommonMatch.noSuchElement;
-import static ru.serge2nd.test.match.CommonMatch.sameAs;
-import static ru.serge2nd.test.match.CommonMatch.sameClass;
+import static ru.serge2nd.test.match.PollMatch.emits;
+import static ru.serge2nd.test.match.CoreMatch.equalTo;
+import static ru.serge2nd.test.match.PollMatch.hasNext;
+import static ru.serge2nd.test.match.CoreMatch.illegalArgument;
+import static ru.serge2nd.test.match.PollMatch.noNext;
+import static ru.serge2nd.test.match.CoreMatch.noSuchElement;
+import static ru.serge2nd.test.match.CoreMatch.sameAs;
+import static ru.serge2nd.test.match.CoreMatch.sameClass;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class CharacteristicSetTest {

@@ -24,8 +24,8 @@ import static org.springframework.util.StreamUtils.copyToString;
 import static ru.serge2nd.ObjectAssist.DEFAULT_NULL_REF_ERROR_TYPE;
 import static ru.serge2nd.ObjectAssist.P_NULL_REF_ERROR_TYPE;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.CommonMatch.fails;
-import static ru.serge2nd.test.match.CommonMatch.illegalArgument;
+import static ru.serge2nd.test.match.CoreMatch.fails;
+import static ru.serge2nd.test.match.CoreMatch.illegalArgument;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class ObjectAssistTest implements NoInstanceTest<ObjectAssist> {

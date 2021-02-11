@@ -7,7 +7,7 @@ import java.lang.reflect.Type;
 
 import static org.junit.platform.commons.util.ReflectionUtils.newInstance;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.CommonMatch.unsupported;
+import static ru.serge2nd.test.match.CoreMatch.unsupported;
 
 @SuppressWarnings("unused")
 public interface NoInstanceTest<T> {

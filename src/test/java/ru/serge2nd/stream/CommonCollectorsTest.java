@@ -30,9 +30,9 @@ import static ru.serge2nd.stream.util.CollectingOptions.NON_NULL;
 import static ru.serge2nd.stream.util.CollectingOptions.UNMODIFIABLE;
 import static ru.serge2nd.stream.util.WithCharacteristics.*;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.CommonMatch.equalTo;
-import static ru.serge2nd.test.match.CommonMatch.sameAs;
-import static ru.serge2nd.test.match.CommonMatch.sameClass;
+import static ru.serge2nd.test.match.CoreMatch.equalTo;
+import static ru.serge2nd.test.match.CoreMatch.sameAs;
+import static ru.serge2nd.test.match.CoreMatch.sameClass;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class CommonCollectorsTest implements NoInstanceTest<CommonCollectors> {

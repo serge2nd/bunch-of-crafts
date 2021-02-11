@@ -26,10 +26,10 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static ru.serge2nd.test.Asserting.assertEach;
 import static ru.serge2nd.test.match.AssertForMany.assertForMany;
 import static ru.serge2nd.test.match.AssertThat.assertThat;
-import static ru.serge2nd.test.match.SequentMatch.emits;
-import static ru.serge2nd.test.match.CommonMatch.equalTo;
-import static ru.serge2nd.test.match.CommonMatch.noSuchElement;
-import static ru.serge2nd.test.match.CommonMatch.sameAs;
+import static ru.serge2nd.test.match.PollMatch.emits;
+import static ru.serge2nd.test.match.CoreMatch.equalTo;
+import static ru.serge2nd.test.match.CoreMatch.noSuchElement;
+import static ru.serge2nd.test.match.CoreMatch.sameAs;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class UnmodifiableArrayListTest {
