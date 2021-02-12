@@ -23,7 +23,9 @@ import static org.springframework.util.StringUtils.hasText;
 public class ObjectAssist {
     private ObjectAssist() { throw errNotInstantiable(lookup()); }
 
+    /** The system property containing the type which instances are returned by {@link #nullRefError(String)}. */
     public static final String               P_NULL_REF_ERROR_TYPE       = "nullRefErrorType";
+    /** The default type which instances are returned by {@link #nullRefError(String)}. */
     public static Class<? extends Throwable> DEFAULT_NULL_REF_ERROR_TYPE = IllegalArgumentException.class;
 
     private static final MethodHandle NULL_REF_ERROR_CONSTRUCTOR = nullRefErrorConstructor();
@@ -37,26 +39,43 @@ public class ObjectAssist {
         return lookup().findConstructor(errorType, methodType(void.class, String.class));
     }
 
+    /**
+     * Equivalent of {@link #nullSafe(Object, String, Function) nullSafe(x, msg, ObjectAssist::nullRefError)}.
+     */
     @NonNull
-    public static <V> V nullSafe(@Nullable V v, String msg) {
-        if (v == null) { throwSneaky(nullRefError(msg)); return ignored(); }
-        return v;
+    public static <X> X nullSafe(@Nullable X x, String msg) {
+        return nullSafe(x, msg, ObjectAssist::nullRefError);
     }
+    /**
+     * If the first arg is null, throws a {@link Throwable} via {@link #throwSneaky(Throwable) throwSneaky()}
+     * using the provided function as a source of throwable object with the passed message.
+     */
     @NonNull
-    public static <V> V nullSafe(@Nullable V v, String msg, Function<String, ? extends Throwable> err) {
-        if (v == null) { throwSneaky(err.apply(msg)); return ignored(); }
-        return v;
+    public static <X> X nullSafe(@Nullable X x, String msg, Function<String, ? extends Throwable> err) {
+        if (x == null) { throwSneaky(err.apply(msg)); return ignored(); }
+        return x;
     }
+    /**
+     * If the first arg is null, throws a {@link Throwable} via {@link #throwSneaky(Throwable) throwSneaky()}
+     * using the provided supplier as a source of throwable object.
+     */
     @NonNull
-    public static <V> V nullSafe(@Nullable V v, Supplier<? extends Throwable> err) {
-        if (v == null) { throwSneaky(err.get()); return ignored(); }
-        return v;
+    public static <X> X nullSafe(@Nullable X x, Supplier<? extends Throwable> err) {
+        if (x == null) { throwSneaky(err.get()); return ignored(); }
+        return x;
     }
-
-    @SuppressWarnings("unchecked")
-    public static <T extends Throwable> void throwSneaky(Throwable t) throws T { throw (T)t; }
+    /**
+     * Instantiates a {@link Throwable} with the given message
+     * and the type specified in the {@link #P_NULL_REF_ERROR_TYPE} system property.
+     */
     @SneakyThrows
     public static Throwable nullRefError(String msg) { return (Throwable)NULL_REF_ERROR_CONSTRUCTOR.invoke(msg); }
+
+    /**
+     * Throws a checked exception as if it is unchecked eliminating need in try-catch.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Throwable> void throwSneaky(Throwable t) throws T { throw (T)t; }
 
     /**
      * Flattens the specified array into one-dimensional array with the same component type.
@@ -173,6 +192,9 @@ public class ObjectAssist {
         return new UnsupportedOperationException("non-instantiable: " + cls);
     }
 
+    /**
+     * Helps static analyzers to work properly in some cases.
+     */
     @SuppressWarnings("unchecked")
     private static <V> V ignored() { return (V)IGNORED; }
     private static final Object IGNORED = new Object();
