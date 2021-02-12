@@ -25,4 +25,12 @@
             </repositories>
         </profile>
     </profiles>
+
+    <servers>
+        <server>
+            <id>serge2nd-artifactory</id>
+            <username>serge2nd@yandex.ru</username>
+            <password>${env.ARTIFACTORY_TOKEN}</password>
+        </server>
+    </servers>
 </settings>

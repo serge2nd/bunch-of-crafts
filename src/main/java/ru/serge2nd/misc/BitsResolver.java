@@ -10,9 +10,10 @@ import static java.util.Arrays.copyOf;
 /**
  * Example:
  * <pre>
- *     int $1ST = 1 << 5;
- *     int $2ND = 1 << 10;
- *     int $3RD = 1 << 20;
+ *     int $1ST      = 1 << 5;
+ *     int $2ND      = 1 << 10;
+ *     int $3RD      = 1 << 20;
+ *     int TRASH_BIT = 1 << 15;
  *     int ALL = $1ST | $2ND | $3RD;
  *
  *     BitsResolver<String> r = new BitsResolver<>(ALL,
@@ -21,12 +22,12 @@ import static java.util.Arrays.copyOf;
  *
  *     assert "xxx".equals(r.resolve(0));
  *     assert "xxv".equals(r.resolve($1ST));
- *     assert "xvx".equals(r.resolve($2ND));
+ *     assert "xvx".equals(r.resolve($2ND | TRASH_BIT));
  *     assert "xvv".equals(r.resolve($1ST | $2ND));
  *
- *     assert "vxx".equals(r.resolve($3RD));
+ *     assert "vxx".equals(r.resolve($3RD | TRASH_BIT));
  *     assert "vxv".equals(r.resolve($1ST | $3RD));
- *     assert "vvx".equals(r.resolve($2ND | $3RD));
+ *     assert "vvx".equals(r.resolve($2ND | $3RD | TRASH_BIT));
  *     assert null == r.resolve($1ST |$2ND | $3RD);
  * </pre>
  */

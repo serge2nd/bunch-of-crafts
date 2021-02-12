@@ -143,4 +143,11 @@
         <sniffer-plugin.version>1.19</sniffer-plugin.version>
         <jacoco-plugin.version>0.8.6</jacoco-plugin.version>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>serge2nd-artifactory</id>
+            <url>https://serge2nd.jfrog.io/artifactory/maven</url>
+        </repository>
+    </distributionManagement>
 </project>
