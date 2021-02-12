@@ -1,4 +1,4 @@
-# bunch-of-crafts [![LATEST](https://img.shields.io/github/v/release/serge2nd/bunch-of-crafts?color=green&label=latest)](https://serge2nd.jfrog.io/artifactory/maven/ru/serge2nd/bunch-of-crafts/) [![SNAPSHOT](https://img.shields.io/github/v/tag/serge2nd/bunch-of-crafts)](https://serge2nd.jfrog.io/artifactory/maven/ru/serge2nd/bunch-of-crafts/0.9.0-SNAPSHOT)
+# bunch-of-crafts [![LATEST](https://img.shields.io/github/v/release/serge2nd/bunch-of-crafts?color=green&label=latest)](https://serge2nd.jfrog.io/artifactory/maven/ru/serge2nd/bunch-of-crafts/0.9.0) [![SNAPSHOT](https://img.shields.io/github/v/tag/serge2nd/bunch-of-crafts)](https://serge2nd.jfrog.io/artifactory/maven/ru/serge2nd/bunch-of-crafts/0.9.0-SNAPSHOT)
 [![JDK8](https://github.com/serge2nd/bunch-of-crafts/workflows/JDK8/badge.svg)](https://github.com/serge2nd/bunch-of-crafts/actions?query=workflow%3A%22JDK8%22)
 [![JDK11](https://github.com/serge2nd/bunch-of-crafts/workflows/JDK11/badge.svg)](https://github.com/serge2nd/bunch-of-crafts/actions?query=workflow%3A%22JDK11%22)
 [![JDK15](https://github.com/serge2nd/bunch-of-crafts/workflows/JDK15/badge.svg)](https://github.com/serge2nd/bunch-of-crafts/actions?query=workflow%3A%22JDK15%22)
@@ -29,7 +29,11 @@ First add the repository:
 Then declare the dependency:
 - release
 ```xml
-<!-- currently not available -->
+<dependency>
+  <groupId>ru.serge2nd</groupId>
+  <artifactId>bunch-of-crafts</artifactId>
+  <version>0.9.0</version>
+</dependency>
 ```
 - snapshot
 ```xml
